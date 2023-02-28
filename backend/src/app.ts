@@ -3,6 +3,7 @@ import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import apiRoute from './routes/router';
+import globalErrorHandler from './controllers/errorController';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -29,5 +30,7 @@ app.get('*', (req, res) => {
     message: 'Error handler',
   });
 });
+
+app.use(globalErrorHandler);
 
 export default app;

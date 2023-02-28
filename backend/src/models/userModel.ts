@@ -1,11 +1,12 @@
 import mongoose, { Document } from 'mongoose';
+import bcrypt from 'bcrypt';
 
 export interface UserDocument extends Document {
   username: string;
   email: string;
   name: string;
-  password: string;
-  passwordConfirm: string;
+  password: string | undefined;
+  passwordConfirm: string | undefined;
   passwordChangeAt: Date;
   passwordResetToken: string;
   passwordResetExpires: string;
@@ -15,6 +16,11 @@ export interface UserDocument extends Document {
   followings: any;
   isAdmin: boolean;
   active: boolean;
+  description: string;
+  city: string;
+  from: string;
+  relationship: 'single' | 'in relationship' | 'married';
+  checkPassword: (inputPassword: string, encryptedPassword: string) => boolean;
 }
 
 const userSchema = new mongoose.Schema<UserDocument>(
@@ -47,6 +53,7 @@ const userSchema = new mongoose.Schema<UserDocument>(
           const user = this as any;
           return el === user.password;
         },
+        message: 'Password are not the same.',
       },
     },
     passwordChangeAt: Date,
@@ -77,9 +84,39 @@ const userSchema = new mongoose.Schema<UserDocument>(
       default: true,
       select: false,
     },
+    description: {
+      type: String,
+      max: 128,
+    },
+    city: {
+      type: String,
+      max: 64,
+    },
+    from: {
+      type: String,
+      max: 64,
+    },
+    relationship: {
+      type: String,
+      enum: ['single', 'in relationship', 'married'],
+    },
   },
   { timestamps: true }
 );
+
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) next();
+  if (typeof this?.password === 'string' && this?.password.length > 0)
+    this.password = await bcrypt.hash(this.password, 12);
+
+  this.passwordConfirm = undefined;
+
+  next();
+});
+
+userSchema.methods.checkPassword = async function (inputPassword, encryptedPassword) {
+  return await bcrypt.compare(inputPassword, encryptedPassword);
+};
 
 const User = mongoose.model<UserDocument>('User', userSchema);
 
