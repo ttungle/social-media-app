@@ -14,6 +14,7 @@ export interface UserDocument extends Document {
   coverPicture: string;
   followers: any;
   followings: any;
+  role: 'admin' | 'user';
   isAdmin: boolean;
   active: boolean;
   description: string;
@@ -21,6 +22,7 @@ export interface UserDocument extends Document {
   from: string;
   relationship: 'single' | 'in relationship' | 'married';
   checkPassword: (inputPassword: string, encryptedPassword: string) => boolean;
+  passwordChangeAfter: (jwtCreatedAt: Date) => boolean;
 }
 
 const userSchema = new mongoose.Schema<UserDocument>(
@@ -75,10 +77,15 @@ const userSchema = new mongoose.Schema<UserDocument>(
       type: Array,
       default: [],
     },
-    isAdmin: {
-      type: Boolean,
-      default: false,
+    role: {
+      type: String,
+      enum: ['admin', 'user'],
+      default: 'user',
     },
+    // isAdmin: {
+    //   type: Boolean,
+    //   default: false,
+    // },
     active: {
       type: Boolean,
       default: true,
@@ -116,6 +123,10 @@ userSchema.pre('save', async function (next) {
 
 userSchema.methods.checkPassword = async function (inputPassword, encryptedPassword) {
   return await bcrypt.compare(inputPassword, encryptedPassword);
+};
+
+userSchema.methods.passwordChangeAfter = function (jwtCreatedAt) {
+  return this?.passwordChangeAt > jwtCreatedAt;
 };
 
 const User = mongoose.model<UserDocument>('User', userSchema);

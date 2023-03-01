@@ -1,12 +1,17 @@
 import express from 'express';
-import { getUser } from '../controllers/userController';
+import { getUser, updateUser, deleteUser } from '../controllers/userController';
+import { protect, restrictTo } from '../controllers/authController';
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.send('Hey its user route');
-});
+router.use(protect);
 
-router.get('/me', getUser);
+// router.get('/me');
+// router.patch('/updateMe');
+// router.patch('/updateMyPassword');
+// router.delete('/deleteMe');
+
+router.use(restrictTo('admin'));
+router.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
 
 export default router;
