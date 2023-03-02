@@ -82,10 +82,6 @@ const userSchema = new mongoose.Schema<UserDocument>(
       enum: ['admin', 'user'],
       default: 'user',
     },
-    // isAdmin: {
-    //   type: Boolean,
-    //   default: false,
-    // },
     active: {
       type: Boolean,
       default: true,
