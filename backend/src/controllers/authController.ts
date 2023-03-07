@@ -75,3 +75,32 @@ export const restrictTo = (...roles) =>
 
     next();
   });
+
+export const updatePassword = catchAsync(async (req, res, next) => {
+  const { currentPassword, newPassword, passwordConfirm } = req.body;
+
+  const user = await User.findById(req.user.id).select('+password');
+
+  if (!user) return next(new AppError('User cannot be found.', 400));
+
+  if (!(await user.checkPassword(currentPassword, user.password as string)))
+    return next(new AppError('Your current password is wrong.', 401));
+
+  if (newPassword !== passwordConfirm)
+    return next(new AppError('The password and confirm password do not match.', 400));
+
+  user.password = newPassword;
+  user.passwordConfirm = passwordConfirm;
+  await user.save();
+
+  const token = createToken(user.id, user.email);
+  user.password = undefined;
+
+  res.status(200).json({
+    status: 'success',
+    token,
+    data: {
+      user,
+    },
+  });
+});

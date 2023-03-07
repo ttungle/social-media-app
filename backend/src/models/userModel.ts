@@ -7,7 +7,7 @@ export interface UserDocument extends Document {
   name: string;
   password: string | undefined;
   passwordConfirm: string | undefined;
-  passwordChangeAt: Date;
+  passwordChangeAt: Date | number | string;
   passwordResetToken: string;
   passwordResetExpires: string;
   profilePicture: string;
@@ -117,12 +117,24 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password') || this.isNew) next();
+
+  this.passwordChangeAt = Date.now() - 1000;
+  next();
+});
+
 userSchema.methods.checkPassword = async function (inputPassword, encryptedPassword) {
   return await bcrypt.compare(inputPassword, encryptedPassword);
 };
 
 userSchema.methods.passwordChangeAfter = function (jwtCreatedAt) {
-  return this?.passwordChangeAt > jwtCreatedAt;
+  if (this?.passwordChangeAt) {
+    const dateTimestamp = parseInt(this.passwordChangeAt.getTime(), 10) / 1000;
+    return dateTimestamp > jwtCreatedAt;
+  }
+
+  return false;
 };
 
 const User = mongoose.model<UserDocument>('User', userSchema);
