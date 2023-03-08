@@ -24,7 +24,8 @@ export const updateMe = catchAsync(async (req, res, next) => {
     'description',
     'city',
     'from',
-    'relationship'
+    'relationship',
+    'active'
   );
 
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
