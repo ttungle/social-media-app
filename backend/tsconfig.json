@@ -1,17 +1,19 @@
 {
-    "compilerOptions": {
-        "module": "CommonJS",
-        "moduleResolution": "node",
-        "target": "ES6",
-        "sourceMap": true,
-        "outDir": "dist",
-        "rootDir": ".",
-        "strict": true,
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true,
-        "allowSyntheticDefaultImports": true,
-    },
-    "include": [ "index.ts", "src/**/*" ],
-    "exclude": ["node_modules"]
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "target": "ES6",
+    "sourceMap": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "strict": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["src/app.ts", "src/**/*"],
+  "exclude": ["node_modules"]
 }
