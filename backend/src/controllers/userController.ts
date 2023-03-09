@@ -91,3 +91,45 @@ export const deleteUser = catchAsync(async (req, res, next) => {
     data: null,
   });
 });
+
+export const followUser = catchAsync(async (req, res, next) => {
+  if (req?.params?.id === req?.user?.id) return next(new AppError('You cannot follow your self.', 400));
+
+  const user = await User.findById(req?.params?.id);
+  const currentUser = await User.findById(req?.user?.id);
+
+  if (!user) return next(new AppError('There are no user found with that id.', 404));
+  if (!currentUser) return next(new AppError('You are not login. Please login to perform this action.', 401));
+  if (user.followers.includes(currentUser.id)) return next(new AppError('You already have follow this user.', 403));
+
+  await user.updateOne({ $push: { followers: currentUser.id } });
+  await currentUser.updateOne({ $push: { followings: user.id } });
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      message: 'User has been followed.',
+    },
+  });
+});
+
+export const unFollowUser = catchAsync(async (req, res, next) => {
+  if (req?.params?.id === req?.user?.id) return next(new AppError('You cannot unfollow your self.', 400));
+
+  const user = await User.findById(req?.params?.id);
+  const currentUser = await User.findById(req?.user?.id);
+
+  if (!user) return next(new AppError('There are no user found with that id.', 404));
+  if (!currentUser) return next(new AppError('You are not login. Please login to perform this action.', 401));
+  if (!user.followers.includes(currentUser.id)) return next(new AppError('You already have unfollow this user.', 403));
+
+  await user.updateOne({ $pull: { followers: currentUser.id } });
+  await currentUser.updateOne({ $pull: { followings: user.id } });
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      message: 'User has been unfollowed.',
+    },
+  });
+});
