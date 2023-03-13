@@ -9,7 +9,8 @@ import {
   followUser,
   unFollowUser,
 } from '../controllers/userController';
-import { protect, restrictTo, updatePassword } from '../controllers/authController';
+import { protect, updatePassword } from '../controllers/authController';
+import { restrictTo } from '../middlewares/authMiddleware';
 
 const router = express.Router();
 
