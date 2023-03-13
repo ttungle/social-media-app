@@ -1,7 +1,7 @@
 import * as jwt from 'jsonwebtoken';
-import User from '../models/userModel';
-import { catchAsync, AppError } from '../utils';
 import { promisify } from 'util';
+import User from '../models/userModel';
+import { AppError, catchAsync } from '../utils';
 
 const createToken = (id, email) =>
   jwt.sign({ id, email }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
@@ -68,13 +68,6 @@ export const protect = catchAsync(async (req, res, next) => {
 
   next();
 });
-
-export const restrictTo = (...roles) =>
-  catchAsync(async (req, res, next) => {
-    if (!roles.includes(req?.user?.role)) next(new AppError('You do not have permission to perform this action.', 403));
-
-    next();
-  });
 
 export const updatePassword = catchAsync(async (req, res, next) => {
   const { currentPassword, newPassword, passwordConfirm } = req.body;
