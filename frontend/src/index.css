@@ -1,0 +1,13 @@
+@import "./themes/fonts/Inter.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter;
+}
+
+body {
+  margin: 0;
+  box-sizing: border-box;
+}
