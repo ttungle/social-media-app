@@ -1,0 +1,9 @@
+<<<<<<< Updated upstream
+node_modules
+=======
+.DS_Store
+node_modules
+yarn.*
+.env
+.env.*
+>>>>>>> Stashed changes
