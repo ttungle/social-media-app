@@ -11,7 +11,7 @@ export function MainLayout({ children }: MainLayoutProps) {
   return (
     <div className="flex flex-col h-screen">
       <Header />
-      <main className="flex grow">
+      <main className="flex grow mt-14 bg-gray-100">
         <SideBar
           showMiniBar={false}
           groupData={[
@@ -21,7 +21,7 @@ export function MainLayout({ children }: MainLayoutProps) {
             },
           ]}
         />
-        <section className="flex-1">{children}</section>
+        <section className="flex-1 container mx-auto">{children}</section>
         <RightBar />
       </main>
     </div>

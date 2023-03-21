@@ -1,9 +1,17 @@
-import { AiFillMessage } from 'react-icons/ai';
-import { IoMdNotifications } from 'react-icons/io';
-import { BiSearch } from 'react-icons/bi';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { AiFillMessage } from 'react-icons/ai';
+import { BiSearch } from 'react-icons/bi';
+import { IoMdNotifications } from 'react-icons/io';
+import { SelectItemData, SelectionField } from '../form-controls/selection-fields';
+
+const localData = [
+  { label: 'English', value: 'en' },
+  { label: 'Tiếng Việt', value: 'vi' },
+];
 
 export function Header() {
+  const { i18n } = useTranslation();
   const [openMenu, setOpenMenu] = useState(false);
 
   const handleAvatarClick = () => {
@@ -14,9 +22,13 @@ export function Header() {
     setOpenMenu(false);
   };
 
+  const handleSelectChange = (value: SelectItemData) => {
+    i18n.changeLanguage(value?.value);
+  };
+
   return (
     <>
-      <nav className="bg-white shadow-md">
+      <nav className="fixed left-0 right-0 top-0 z-50 bg-white shadow shadow-gray-300">
         <div className="mx-auto px-2 sm:px-6 lg:px-8">
           <div className="relative flex h-14 items-center justify-between">
             <div className="flex items-center justify-center sm:items-stretch sm:justify-start">
@@ -25,12 +37,13 @@ export function Header() {
               </a>
             </div>
 
-            <div className="flex items-center justify-center w-4/12 bg-slate-100 px-3 rounded-full">
+            <div className="flex items-center justify-center w-4/12 bg-gray-100 px-3 rounded-full">
               <BiSearch style={{ marginRight: '12px', fontSize: '1.25rem' }} />
-              <input placeholder="search LTT-Social" className="h-10 w-full outline-none  bg-slate-100" />
+              <input placeholder="search LTT-Social" className="h-10 w-full outline-none bg-gray-100 text-base" />
             </div>
 
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+              <SelectionField data={localData} onChange={handleSelectChange} className="mr-4 ml-auto" />
               <button type="button" className="rounded-full mr-3 p-2.5 bg-slate-200 hover:bg-slate-300">
                 <AiFillMessage style={{ fontSize: '1.25rem' }} />
               </button>

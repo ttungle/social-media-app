@@ -15,7 +15,7 @@ export function SideBar({ showMiniBar, groupData }: SideBarProps) {
   return (
     <>
       {!showMiniBar && (
-        <div className="mr-12 py-6 divide-y pl-5 min-w-[250px]">
+        <div className="fixed py-6 divide-y pl-5 min-w-[250px]">
           <ul>
             <li className="flex items-center justify-start hover:cursor-pointer my-5 ">
               <AiFillHome style={{ fontSize: '1.25rem', color: '#007def' }} />

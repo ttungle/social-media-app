@@ -8,6 +8,9 @@ module.exports = {
         secondary: '#4dd4c2',
       },
     },
+    container: {
+      center: true,
+    },
   },
   plugins: [],
   colors: {},
