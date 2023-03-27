@@ -11,7 +11,7 @@ const localData = [
 ];
 
 export function Header() {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation('home');
   const [openMenu, setOpenMenu] = useState(false);
 
   const handleAvatarClick = () => {
@@ -37,7 +37,7 @@ export function Header() {
               </a>
             </div>
 
-            <div className="flex items-center justify-center w-4/12 bg-gray-100 px-3 rounded-full">
+            <div className="absolute inset-x-1/2 -translate-x-[54.5%] flex items-center justify-center w-[672px] bg-gray-100 px-3 rounded-full">
               <BiSearch style={{ marginRight: '12px', fontSize: '1.25rem' }} />
               <input placeholder="search LTT-Social" className="h-10 w-full outline-none bg-gray-100 text-base" />
             </div>

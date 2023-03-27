@@ -3,10 +3,12 @@ import * as React from 'react';
 export interface IconButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
-  style?: React.CSSProperties;
+  className?: string;
 }
 
-export function IconButton({ children, onClick, style }: IconButtonProps) {
+export function IconButton(props: IconButtonProps) {
+  const { children, onClick, className = '' } = props;
+
   const handleClick = () => {
     if (!onClick) return;
 
@@ -14,7 +16,7 @@ export function IconButton({ children, onClick, style }: IconButtonProps) {
   };
 
   return (
-    <button className="text-gray-100 p-4" onClick={handleClick} style={{ ...style }}>
+    <button className={`text-gray-100 p-4 ${className}`} onClick={handleClick}>
       {children}
     </button>
   );

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Avatar } from '../common/avatar';
+import { Avatar } from '../avatar';
 import { UserData } from '@/models';
 import { InputField } from '../common/form-controls/input-fields';
 import { HiVideoCamera } from 'react-icons/hi';
@@ -8,11 +8,12 @@ import { MdPhotoLibrary, MdTagFaces } from 'react-icons/md';
 export interface CreatePostProps {
   user: UserData;
   userProfileLink?: string;
+  className?: string;
 }
 
-export function CreatePost({ user, userProfileLink }: CreatePostProps) {
+export function CreatePost({ user, userProfileLink, className }: CreatePostProps) {
   return (
-    <div className="max-w-2xl mx-auto mt-4 rounded-lg bg-white shadow pt-3 px-4">
+    <div className={`max-w-2xl mx-auto mt-4 rounded-lg bg-white shadow pt-3 px-4 ${className}`}>
       <div className="flex justify-start items-center">
         <Avatar src={user?.profilePicture ?? ''} alt="user-profile" link={userProfileLink} status={user?.status} />
 
