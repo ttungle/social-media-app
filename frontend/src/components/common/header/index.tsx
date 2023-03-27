@@ -4,6 +4,7 @@ import { AiFillMessage } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi';
 import { IoMdNotifications } from 'react-icons/io';
 import { SelectItemData, SelectionField } from '../form-controls/selection-fields';
+import { BASE_ROUTEs } from '@/constants/base-routes';
 
 const localData = [
   { label: 'English', value: 'en' },
@@ -11,7 +12,7 @@ const localData = [
 ];
 
 export function Header() {
-  const { i18n, t } = useTranslation('home');
+  const { i18n } = useTranslation('home');
   const [openMenu, setOpenMenu] = useState(false);
 
   const handleAvatarClick = () => {
@@ -32,7 +33,10 @@ export function Header() {
         <div className="mx-auto px-2 sm:px-6 lg:px-8">
           <div className="relative flex h-14 items-center justify-between">
             <div className="flex items-center justify-center sm:items-stretch sm:justify-start">
-              <a href="#" className="flex flex-shrink-0 items-center text-primary font-bold text-2xl no-underline">
+              <a
+                href={BASE_ROUTEs?.home}
+                className="flex flex-shrink-0 items-center text-primary font-bold text-2xl no-underline"
+              >
                 LTT Social
               </a>
             </div>
