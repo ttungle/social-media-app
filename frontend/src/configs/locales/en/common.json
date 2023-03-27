@@ -1,0 +1,16 @@
+{
+    "sideBar": {
+        "home": "Home"
+    },
+    "button": {
+        "like": "Like",
+        "comment": "Comments",
+        "share": "Shares",
+        "seeAll": "See all",
+        "edit": "Edit"
+    },
+    "feed": {
+        "likedInfo": "You and",
+        "likedOthers": "others"
+    }
+}

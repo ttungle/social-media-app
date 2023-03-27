@@ -1,0 +1,10 @@
+{
+    "sideBar": {
+        "home": "Home",
+        "watch": "Watch",
+        "friend": "Friends",
+        "market": "Marketplace",
+        "gaming": "Gaming",
+        "seeAllGroup": "See all group"
+    }
+}

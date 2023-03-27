@@ -1,0 +1,16 @@
+{
+    "sideBar": {
+        "home": "Home"
+    },
+    "button": {
+        "like": "Thích",
+        "comment": "Bình luận",
+        "share": "Chia sẻ",
+        "seeAll": "Xem tất cả",
+        "edit": "Chỉnh sửa"
+    },
+    "feed": {
+        "likedInfo": "Bạn và",
+        "likedOthers": "người khác"
+    }
+}
