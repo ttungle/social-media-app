@@ -1,10 +1,12 @@
 import { ContainedButton } from '@/components/common/buttons/contained-button';
-import { InputField } from '@/components/common/form-controls/input-fields';
 import { OutlinedInput } from '@/components/common/form-controls/input-fields/outlined-input';
-import * as React from 'react';
-import { useTranslation } from 'react-i18next';
-import { FieldValues, useForm } from 'react-hook-form';
 import { PasswordField } from '@/components/common/form-controls/password-field';
+import { BASE_ROUTEs } from '@/constants/base-routes';
+import { useAuthContext } from '@/context';
+import { LoginPayloadData } from '@/models';
+import { FieldValues, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 export interface LoginPageProps {}
 
@@ -23,7 +25,9 @@ const data = [
 ];
 
 export function LoginPage(props: LoginPageProps) {
+  const { login } = useAuthContext();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const form = useForm({
     defaultValues: {
       email: '',
@@ -33,8 +37,10 @@ export function LoginPage(props: LoginPageProps) {
 
   const { handleSubmit } = form;
 
-  const handleFormSubmit = (values: FieldValues) => {
-    console.log('values: ', values);
+  const handleFormSubmit = async (values: FieldValues) => {
+    const payload = { ...values } as LoginPayloadData;
+    await login(payload);
+    navigate(BASE_ROUTEs?.home);
   };
 
   return (

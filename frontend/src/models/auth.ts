@@ -25,6 +25,15 @@ export interface AuthenticationResultData {
   };
 }
 
+export interface AuthContextData {
+  user: UserData | null;
+  login: (payload: LoginPayloadData) => Promise<void>;
+}
+
+export interface AuthProviderProps {
+  children: React.ReactNode;
+}
+
 // export interface UserData {
 //   id: number | string;
 //   username: string;

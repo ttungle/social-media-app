@@ -8,6 +8,7 @@ export interface MainLayoutProps {
   children: React.ReactNode;
   showMiniBar?: boolean;
 }
+
 const user: UserData = {
   id: '1',
   email: 'thanhtungle@gmail.com',

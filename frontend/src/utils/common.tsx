@@ -5,6 +5,6 @@ export function formatStringWithMaxLength(content: string, maxLength: number) {
   return content.substring(0, maxLength) + '...';
 }
 
-export function getBaseApiURL() {
-  return import.meta.env.VITE_BASE_API_URL;
+export function getBaseApiURL(path?: string) {
+  return Boolean(path) ? `${import.meta.env.VITE_BASE_API_URL}${path}` : import.meta.env.VITE_BASE_API_URL;
 }

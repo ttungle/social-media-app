@@ -3,7 +3,7 @@ import { getBaseApiURL } from '@/utils/common';
 import axios, { AxiosRequestHeaders } from 'axios';
 
 const axiosClient = axios.create({
-  baseURL: getBaseApiURL(),
+  baseURL: getBaseApiURL('/v1'),
   headers: {
     'Content-Type': 'application/json',
   },
@@ -11,9 +11,10 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
   async function (config) {
-    if (localStorage.get('access_token')) {
+    const token = localStorage.getItem('access_token');
+    if (token) {
       config.headers = {
-        Authorization: `Bearer ${localStorage.get('access_token')}`,
+        Authorization: `Bearer ${token}`,
       } as AxiosRequestHeaders;
     }
 
@@ -31,7 +32,7 @@ axiosClient.interceptors.response.use(
   function (error) {
     const { config, status, data } = error.response;
     const URLs = Object.values(AuthURLList);
-
+    console.log(config.url);
     if (URLs.includes(config.url) && status === 400) {
       const errorMessage = data?.error?.message ?? '';
 
