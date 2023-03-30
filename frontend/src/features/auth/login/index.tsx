@@ -1,7 +1,6 @@
 import { ContainedButton } from '@/components/common/buttons/contained-button';
 import { OutlinedInput } from '@/components/common/form-controls/input-fields/outlined-input';
 import { PasswordField } from '@/components/common/form-controls/password-field';
-import { BASE_ROUTEs } from '@/constants/base-routes';
 import { useAuthContext } from '@/context';
 import { LoginPayloadData } from '@/models';
 import { FieldValues, useForm } from 'react-hook-form';
@@ -40,7 +39,6 @@ export function LoginPage(props: LoginPageProps) {
   const handleFormSubmit = async (values: FieldValues) => {
     const payload = { ...values } as LoginPayloadData;
     await login(payload);
-    navigate(BASE_ROUTEs?.home);
   };
 
   return (

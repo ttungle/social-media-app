@@ -27,7 +27,9 @@ export interface AuthenticationResultData {
 
 export interface AuthContextData {
   user: UserData | null;
+  isFirstLoading: boolean;
   login: (payload: LoginPayloadData) => Promise<void>;
+  logout: () => void;
 }
 
 export interface AuthProviderProps {

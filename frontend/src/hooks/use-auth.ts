@@ -1,18 +1,29 @@
-import { LoginPayloadData, UserData } from '@/models';
-import { useState } from 'react';
+import { BASE_ROUTEs } from '@/constants/base-routes';
+import { LoginPayloadData } from '@/models';
+import { useQuery } from '@tanstack/react-query';
 import { authApi } from './../api/auth';
 
 export function useAuth() {
-  const [user, setUser] = useState<UserData | null>(null);
+  const {
+    data: userData,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ['getProfile'],
+    queryFn: async () => await authApi.getUserProfile(),
+    retry: 1,
+  });
+
+  const isFirstLoading = userData === undefined && (error === undefined || error === null);
 
   const login = async (payload: LoginPayloadData) => {
     if (!payload) return;
 
     try {
       const result = await authApi.login(payload);
-      console.log(result);
       localStorage.setItem('access_token', result?.token);
-      setUser(result?.data?.user);
+      refetch();
+      window.location.href = BASE_ROUTEs.home;
     } catch (error) {
       console.log(error);
     }
@@ -20,5 +31,10 @@ export function useAuth() {
 
   const register = (payload: any) => {};
 
-  return { user, login };
+  const logout = () => {
+    localStorage.removeItem('access_token');
+    refetch();
+  };
+
+  return { user: userData?.data?.user ?? null, isFirstLoading, login, logout };
 }

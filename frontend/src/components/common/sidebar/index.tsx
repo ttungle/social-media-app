@@ -10,7 +10,7 @@ import { MdGroup, MdGroups } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
 export interface SideBarProps {
-  user: UserData;
+  user: UserData | null;
   showMiniBar: boolean;
   groupData?: Array<any>;
 }
@@ -25,7 +25,7 @@ export function SideBar({ user, showMiniBar, groupData }: SideBarProps) {
 
   const handleHomeClick = () => {
     navigate(BASE_ROUTEs.home);
-  }
+  };
 
   return (
     <>
@@ -44,7 +44,7 @@ export function SideBar({ user, showMiniBar, groupData }: SideBarProps) {
                     fill: 'url(#blue-gradient)',
                   }}
                 />
-                <span className="ml-4 text-sm font-medium">Tung Le</span>
+                <span className="ml-4 text-sm font-medium">{user?.username}</span>
               </li>
             </ul>
 
