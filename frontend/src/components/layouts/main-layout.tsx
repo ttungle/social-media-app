@@ -1,6 +1,6 @@
 import { BASE_ROUTEs } from '@/constants/base-routes';
 import { useAuthContext } from '@/context';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '../common/header';
 import { RightBar } from '../common/right-bar';
@@ -10,13 +10,6 @@ export interface MainLayoutProps {
   children: React.ReactNode;
   showMiniBar?: boolean;
 }
-
-// const user: UserData = {
-//   id: '1',
-//   email: 'thanhtungle@gmail.com',
-//   username: 'Fan Page',
-//   profilePicture: 'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-// };
 
 export function MainLayout({ children, showMiniBar = false }: MainLayoutProps) {
   const { user, isFirstLoading } = useAuthContext();

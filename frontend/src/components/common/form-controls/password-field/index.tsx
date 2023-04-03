@@ -10,7 +10,10 @@ export interface PasswordFieldProps {
 
 export function PasswordField(props: PasswordFieldProps) {
   const { placeholder, className, form, name } = props;
-  const { register } = form;
+  const {
+    register,
+    formState: { errors },
+  } = form;
 
   return (
     <>
@@ -20,6 +23,7 @@ export function PasswordField(props: PasswordFieldProps) {
         placeholder={placeholder}
         {...register(name)}
       />
+      {Boolean(errors[name]?.message) && <span className="text-sm text-rose-500">{errors[name]?.message}</span>}
     </>
   );
 }

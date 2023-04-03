@@ -11,7 +11,10 @@ export interface OutlinedInputProps {
 
 export function OutlinedInput(props: OutlinedInputProps) {
   const { type, placeholder, className, form, name } = props;
-  const { register } = form;
+  const {
+    register,
+    formState: { errors },
+  } = form;
   return (
     <>
       <input
@@ -20,6 +23,7 @@ export function OutlinedInput(props: OutlinedInputProps) {
         placeholder={placeholder}
         {...register(name)}
       />
+      {Boolean(errors[name]?.message) && <span className="text-sm text-rose-500">{errors[name]?.message}</span>}
     </>
   );
 }

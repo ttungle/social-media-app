@@ -28,6 +28,7 @@ export interface AuthenticationResultData {
 export interface AuthContextData {
   user: UserData | null;
   isFirstLoading: boolean;
+  register: (payload: RegisterPayloadData) => Promise<void>;
   login: (payload: LoginPayloadData) => Promise<void>;
   logout: () => void;
 }
@@ -36,16 +37,3 @@ export interface AuthProviderProps {
   children: React.ReactNode;
 }
 
-// export interface UserData {
-//   id: number | string;
-//   username: string;
-//   email: string;
-//   profilePicture: string;
-//   coverPicture: string;
-//   followers: Array<string>;
-//   followings: Array<string>;
-//   role: string;
-//   updatedAt?: string;
-//   createdAt: string;
-//   passwordChangeAt?: string;
-// }

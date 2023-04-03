@@ -3,9 +3,12 @@ import { OutlinedInput } from '@/components/common/form-controls/input-fields/ou
 import { PasswordField } from '@/components/common/form-controls/password-field';
 import { useAuthContext } from '@/context';
 import { LoginPayloadData } from '@/models';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import * as yup from 'yup';
+import { RegisterDialog } from '../components/register-dialog';
 
 export interface LoginPageProps {}
 
@@ -26,12 +29,18 @@ const data = [
 export function LoginPage(props: LoginPageProps) {
   const { login } = useAuthContext();
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const [showRegisterDialog, setShowRegisterDialog] = useState(false);
+
+  const schema = yup.object({
+    email: yup.string().email('Please enter your email.').required('Please enter your valid email.'),
+  });
+
   const form = useForm({
     defaultValues: {
       email: '',
       password: '',
     },
+    resolver: yupResolver(schema),
   });
 
   const { handleSubmit } = form;
@@ -60,7 +69,10 @@ export function LoginPage(props: LoginPageProps) {
               </ContainedButton>
               <p className="text-sm text-primary text-center my-4 cursor-pointer hover:underline">Forgot password</p>
               <div className="border-t"></div>
-              <ContainedButton className="bg-green-500 w-full text-white py-3 mt-4 font-bold text-lg hover:bg-green-600">
+              <ContainedButton
+                onClick={() => setShowRegisterDialog(true)}
+                className="bg-green-500 w-full text-white py-3 mt-4 font-bold text-lg hover:bg-green-600"
+              >
                 {t('button.createAccount')}
               </ContainedButton>
             </form>
@@ -74,8 +86,10 @@ export function LoginPage(props: LoginPageProps) {
           </a>
         ))}
 
-        <div className="border-t mt-4"> </div>
+        <div className="border-t mt-4"></div>
       </div>
+
+      {showRegisterDialog && <RegisterDialog setShowDialog={setShowRegisterDialog} />}
     </div>
   );
 }
