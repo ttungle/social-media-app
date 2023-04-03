@@ -1,38 +1,49 @@
-import * as React from 'react';
+import { BASE_ROUTEs } from '@/constants/base-routes';
+import { useAuthContext } from '@/context';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Header } from '../common/header';
-import { SideBar } from '../common/sidebar';
 import { RightBar } from '../common/right-bar';
-import { UserData } from '@/models';
+import { SideBar } from '../common/sidebar';
 
 export interface MainLayoutProps {
   children: React.ReactNode;
   showMiniBar?: boolean;
 }
-const user: UserData = {
-  id: '1',
-  email: 'thanhtungle@gmail.com',
-  username: 'Fan Page',
-  profilePicture: 'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-};
 
 export function MainLayout({ children, showMiniBar = false }: MainLayoutProps) {
+  const { user, isFirstLoading } = useAuthContext();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isFirstLoading && !user?.email) {
+      navigate(BASE_ROUTEs.login);
+    }
+  }, [user, isFirstLoading, window.location.href]);
+
   return (
-    <div className="flex flex-col h-screen">
-      <Header />
-      <main className="flex grow mt-14 bg-gray-100">
-        <SideBar
-          user={user}
-          showMiniBar={showMiniBar}
-          groupData={[
-            {
-              name: 'Test Group 1',
-              avatar: 'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-            },
-          ]}
-        />
-        <section className="flex-1">{children}</section>
-        <RightBar />
-      </main>
-    </div>
+    <>
+      {user?.email && (
+        <div className="flex flex-col h-screen">
+          <Header />
+          <main className="flex grow mt-14 bg-gray-100">
+            <SideBar
+              user={user}
+              showMiniBar={showMiniBar}
+              groupData={[
+                {
+                  name: 'Test Group',
+                  avatar: 'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
+                },
+              ]}
+            />
+            <section className="flex-1">{children}</section>
+            <RightBar />
+          </main>
+        </div>
+      )}
+
+      {!user?.email && <div>Please authenticate to access</div>}
+    </>
   );
 }

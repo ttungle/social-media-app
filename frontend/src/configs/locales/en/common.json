@@ -7,7 +7,9 @@
         "comment": "Comments",
         "share": "Shares",
         "seeAll": "See all",
-        "edit": "Edit"
+        "edit": "Edit",
+        "createAccount": "Create new account",
+        "login": "Log in"
     },
     "feed": {
         "likedInfo": "You and",

@@ -3,6 +3,7 @@ import { HomePage } from '@/features/home';
 import { ProfilePage } from '@/features/profile';
 import { createBrowserRouter } from 'react-router-dom';
 import { MainLayout } from './main-layout';
+import { LoginPage } from '@/features/auth/login';
 
 export const rootRouter = createBrowserRouter([
   {
@@ -20,5 +21,9 @@ export const rootRouter = createBrowserRouter([
         <ProfilePage />
       </MainLayout>
     ),
+  },
+  {
+    path: `${BASE_ROUTEs.login}`,
+    element: <LoginPage />,
   },
 ]);

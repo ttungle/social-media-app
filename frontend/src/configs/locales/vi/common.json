@@ -7,7 +7,9 @@
         "comment": "Bình luận",
         "share": "Chia sẻ",
         "seeAll": "Xem tất cả",
-        "edit": "Chỉnh sửa"
+        "edit": "Chỉnh sửa",
+        "createAccount": "Tạo tài khoản mới",
+        "login": "Đăng nhập"
     },
     "feed": {
         "likedInfo": "Bạn và",
