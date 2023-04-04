@@ -23,7 +23,7 @@ export function HomePage(props: HomePageProps) {
     <>
       <CreatePost user={user} />
       {timelinePosts?.data?.posts.map((post, index) => (
-        <Feed key={post.id} user={user} {...post} post={post} />
+        <Feed key={index} user={user} {...post} post={post} />
       ))}
     </>
   );

@@ -1,10 +1,40 @@
-import { catchAsync } from './../utils/catchAsync';
-import { AppError } from './../utils/appError';
+import multer from 'multer';
 import Post from '../models/postModel';
 import { filterObject } from '../utils';
+import { AppError } from './../utils/appError';
+import { catchAsync } from './../utils/catchAsync';
+
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './public/image/posts');
+  },
+  filename: (req, file, cb) => {
+    const ext = file.mimetype.split('/')[1];
+
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, `post-${req.user.id}-${uniqueSuffix}.${ext}`);
+  },
+});
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new AppError('Not an image! Please upload only images.', 400), false);
+  }
+};
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+export const uploadPostPhotos = upload.array('images', 10);
 
 export const createPost = catchAsync(async (req, res, next) => {
-  const filteredBody = filterObject(req.body, 'description', 'images');
+  const filteredBody: any = filterObject(req.body, 'description', 'images');
+
+  if (req.files) filteredBody.images = req.files.map((file) => `/image/posts/${file.filename}`);
   const postData = {
     userId: req?.user?.id,
     ...filteredBody,
@@ -34,7 +64,9 @@ export const getPost = catchAsync(async (req, res, next) => {
 });
 
 export const updatePost = catchAsync(async (req, res, next) => {
-  const filteredBody = filterObject(req.body, 'description', 'images');
+  const filteredBody: any = filterObject(req.body, 'description', 'images');
+
+  if (req.files) filteredBody.images = req.files.map((file) => `/image/posts/${file.filename}`);
 
   const updatedPost = await Post.findByIdAndUpdate(req.params.id, filteredBody, { new: true, runValidators: true });
 
