@@ -9,10 +9,16 @@
         "seeAll": "See all",
         "edit": "Edit",
         "createAccount": "Create new account",
-        "login": "Log in"
+        "login": "Log in",
+        "post": "Post"
     },
     "feed": {
         "likedInfo": "You and",
         "likedOthers": "others"
+    },
+    "createPost": {
+        "dialogTitle": "Create post",
+        "placeholder": "What in your mind,",
+        "addToPostDesc": "Add to your post"
     }
 }
