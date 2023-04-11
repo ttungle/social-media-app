@@ -32,7 +32,6 @@ axiosClient.interceptors.response.use(
   function (error) {
     const { config, status, data } = error.response;
     const URLs = Object.values(AuthURLList);
-    console.log(config.url);
     if (URLs.includes(config.url) && status === 400) {
       const errorMessage = data?.error?.message ?? '';
 

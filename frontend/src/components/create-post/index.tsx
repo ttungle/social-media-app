@@ -1,5 +1,8 @@
-import { UserData } from '@/models';
+import { postApi } from '@/api/post';
+import { useAuthContext } from '@/context';
+import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
+import { FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { HiVideoCamera } from 'react-icons/hi';
 import { MdPhotoLibrary, MdTagFaces } from 'react-icons/md';
@@ -7,14 +10,28 @@ import { Avatar } from '../avatar';
 import { CreatePostDialog } from '../dialogs/create-post-dialog';
 
 export interface CreatePostProps {
-  user: UserData;
   userProfileLink?: string;
   className?: string;
+  refetch?: () => Promise<any>;
 }
 
-export function CreatePost({ user, userProfileLink, className }: CreatePostProps) {
+export function CreatePost(props: CreatePostProps) {
+  const { userProfileLink, className, refetch } = props;
   const { t } = useTranslation();
   const [showCreatePostDialog, setShowCreatePostDialog] = useState(false);
+  const { user } = useAuthContext();
+
+  const { mutate } = useMutation({
+    mutationKey: ['createPost'],
+    mutationFn: async (payload: any) => await postApi.createPost(payload),
+    onSuccess: () => {
+      setShowCreatePostDialog(false);
+      if (refetch) refetch();
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
 
   const handleCreatePostClick = () => {
     setShowCreatePostDialog(!showCreatePostDialog);
@@ -22,6 +39,19 @@ export function CreatePost({ user, userProfileLink, className }: CreatePostProps
 
   const handleClosePostClick = () => {
     setShowCreatePostDialog(false);
+  };
+
+  const handlePostSubmit = (values: FieldValues) => {
+    const formData = new FormData();
+    if (Boolean(values?.images)) {
+      values?.images?.forEach((image: File) => formData.append('images', image, `${image.name}`));
+    }
+
+    for (const [key, value] of Object.entries(values)) {
+      formData.append(key, value);
+    }
+
+    mutate(formData);
   };
 
   return (
@@ -34,7 +64,7 @@ export function CreatePost({ user, userProfileLink, className }: CreatePostProps
             onClick={handleCreatePostClick}
             className="w-full py-2 px-3 rounded-full ml-2 bg-gray-100 outline-none text-gray-400 hover:bg-gray-200 transition-colors text-left"
           >
-            {t('createPost.placeholder')} {user.username} ?
+            {t('createPost.placeholder')} {user?.username} ?
           </button>
         </div>
 
@@ -60,6 +90,7 @@ export function CreatePost({ user, userProfileLink, className }: CreatePostProps
         <CreatePostDialog
           isOpen={showCreatePostDialog}
           onClose={handleClosePostClick}
+          onSubmit={handlePostSubmit}
           user={user}
           userProfileLink={userProfileLink}
         />

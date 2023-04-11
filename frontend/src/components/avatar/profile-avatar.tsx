@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { HiCamera } from 'react-icons/hi2';
+import { getMediaUrl } from '@/utils/common';
 
 export interface ProfileAvatarProps {
   src: string;
@@ -22,7 +23,11 @@ export function ProfileAvatar(props: ProfileAvatarProps) {
     <>
       <div className={`${className} relative rounded-full`} onClick={handleClick}>
         <div className="bg-white rounded-full p-1">
-          <img src={src} alt={alt} className="w-full h-full rounded-full transition object-cover border" />
+          <img
+            src={getMediaUrl(src) ?? ''}
+            alt={alt}
+            className="w-full h-full rounded-full transition object-cover border"
+          />
           <span className="absolute top-0 right-0 left-0 bottom-0 z-10 bg-black rounded-full opacity-0 hover:cursor-pointer hover:opacity-10 transition" />
         </div>
 

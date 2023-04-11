@@ -91,6 +91,18 @@ export const deletePost = catchAsync(async (req, res, next) => {
   });
 });
 
+export const deleteMyPost = catchAsync(async (req, res, next) => {
+  const post = await Post.findByIdAndDelete(req?.params?.id);
+
+  if (!post) return next(new AppError('No post found with that id.', 404));
+  if (req.user.id !== post.userId) return next(new AppError('You can delete only your post.', 403));
+
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  });
+});
+
 export const likePost = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
 

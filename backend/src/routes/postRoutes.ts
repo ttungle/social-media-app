@@ -9,6 +9,7 @@ import {
   getTimeLine,
   getMyTimeLine,
   uploadPostPhotos,
+  deleteMyPost,
 } from '../controllers/postController';
 import { limitToCurrentUser } from '../middlewares/authMiddleware';
 
@@ -19,11 +20,12 @@ router.route('/').post(uploadPostPhotos, createPost);
 router.put('/:id/like', likePost);
 router.get('/timeline', getTimeLine);
 router.get('/myTimeline', getMyTimeLine);
+router.delete('/deleteMyPost/:id', deleteMyPost);
 
 router
   .route('/:id')
   .get(limitToCurrentUser, getPost)
   .patch(uploadPostPhotos, limitToCurrentUser, updatePost)
-  .delete(limitToCurrentUser, deletePost);
+  .delete(deletePost);
 
 export default router;

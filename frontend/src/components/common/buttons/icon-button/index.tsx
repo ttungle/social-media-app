@@ -16,7 +16,7 @@ export function IconButton(props: IconButtonProps) {
   };
 
   return (
-    <button className={`text-gray-100 p-4 ${className}`} onClick={handleClick}>
+    <button className={`${className}`} onClick={handleClick}>
       {children}
     </button>
   );

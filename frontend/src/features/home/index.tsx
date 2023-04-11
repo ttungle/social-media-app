@@ -6,24 +6,17 @@ import { useQuery } from '@tanstack/react-query';
 
 export interface HomePageProps {}
 
-const user: UserData = {
-  id: '1',
-  email: 'thanhtungle@gmail.com',
-  username: 'Fan Page',
-  profilePicture: 'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-};
-
 export function HomePage(props: HomePageProps) {
-  const { data: timelinePosts } = useQuery({
+  const { data: timelinePosts, refetch } = useQuery({
     queryKey: ['getTimelinePosts'],
     queryFn: async () => await postApi.getTimelinePost(),
   });
 
   return (
     <>
-      <CreatePost user={user} />
+      <CreatePost refetch={refetch} />
       {timelinePosts?.data?.posts.map((post, index) => (
-        <Feed key={index} user={user} {...post} post={post} />
+        <Feed key={index} {...post} post={post} />
       ))}
     </>
   );

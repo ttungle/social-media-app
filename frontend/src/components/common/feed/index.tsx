@@ -1,25 +1,27 @@
-import { AvatarWithText } from '../../avatar-with-text';
-import { GrClose } from 'react-icons/gr';
-import { IconButton } from '../buttons/icon-button';
-import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
-import { BiMessage } from 'react-icons/bi';
-import { TbShare3 } from 'react-icons/tb';
-import { PostData, UserData } from '@/models';
-import { ImageGallery } from '../../image-gallery';
+import { useAuthContext } from '@/context';
+import { PostData } from '@/models';
+import clsx from 'clsx';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import clsx from 'clsx';
+import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
+import { BiMessage } from 'react-icons/bi';
+import { GrClose } from 'react-icons/gr';
+import { TbShare3 } from 'react-icons/tb';
+import { AvatarWithText } from '../../avatar-with-text';
+import { ImageGallery } from '../../image-gallery';
+import { IconButton } from '../buttons/icon-button';
 
 export interface FeedProps {
-  user: UserData;
   post: PostData;
   className?: string;
+  onDelete?: (postId: string) => void;
 }
 
 export function Feed(props: FeedProps) {
-  const { user, post, className } = props;
+  const { post, className, onDelete } = props;
   const { t } = useTranslation();
   const [isLiked, setIsLiked] = useState(false);
+  const { user } = useAuthContext();
 
   const numberOfLikes = useMemo(() => (Array.isArray(post.likes) ? post.likes.length : null), [post]);
   const numberOfComments = useMemo(() => (Array.isArray(post.comments) ? post.comments.length : null), [post]);
@@ -29,6 +31,11 @@ export function Feed(props: FeedProps) {
     setIsLiked(!isLiked);
   };
 
+  const handleDeleteClick = () => {
+    if (!onDelete) return;
+    onDelete(`${post._id}`);
+  };
+
   const handleCommentClick = () => {};
   const handleShareClick = () => {};
 
@@ -36,7 +43,7 @@ export function Feed(props: FeedProps) {
     <div className={`max-w-2xl mx-auto mt-4 rounded-lg bg-white shadow ${className}`}>
       <div className="flex items-center justify-between px-4 pt-3">
         <AvatarWithText src={user?.profilePicture ?? ''} name={user?.username ?? ''} time="2d" privacy="public" />
-        <IconButton>
+        <IconButton onClick={handleDeleteClick} className="p-3 text-gray-900 rounded-full">
           <GrClose className="text-lg" />
         </IconButton>
       </div>
