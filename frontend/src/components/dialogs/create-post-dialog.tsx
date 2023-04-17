@@ -1,5 +1,6 @@
-import { UserData } from '@/models';
-import { useState } from 'react';
+import { PostData, UserData } from '@/models';
+import { getMediaUrl } from '@/utils/common';
+import { useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { GrClose } from 'react-icons/gr';
@@ -14,13 +15,14 @@ import { UploadImageField } from '../common/form-controls/upload-image-field';
 export interface CreatePostDialogProps {
   user: UserData | null;
   userProfileLink?: string;
+  postData?: PostData;
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (values: FieldValues) => void;
 }
 
 export function CreatePostDialog(props: CreatePostDialogProps) {
-  const { user, userProfileLink, isOpen, onClose, onSubmit } = props;
+  const { user, userProfileLink, postData, isOpen, onClose, onSubmit } = props;
   const { t } = useTranslation();
   const [showImageField, setShowImageField] = useState(false);
   const [previewImageURLs, setPreviewImageURLs] = useState<string[]>([]);
@@ -31,7 +33,19 @@ export function CreatePostDialog(props: CreatePostDialogProps) {
     },
   });
 
-  const { register, handleSubmit } = form;
+  const { register, handleSubmit, setValue } = form;
+
+  useEffect(() => {
+    if (postData) {
+      setValue('description', postData?.description);
+
+      if (postData?.images.length > 0) {
+        setShowImageField(true);
+        const imageList = postData?.images.map((item) => getMediaUrl(item));
+        setPreviewImageURLs(imageList as any);
+      }
+    }
+  }, []);
 
   const handleCloseClick = () => {
     if (!onClose) return;

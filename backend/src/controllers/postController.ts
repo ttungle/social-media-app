@@ -66,7 +66,7 @@ export const getPost = catchAsync(async (req, res, next) => {
 export const updatePost = catchAsync(async (req, res, next) => {
   const filteredBody: any = filterObject(req.body, 'description', 'images');
 
-  if (req.files) filteredBody.images = req.files.map((file) => `/image/posts/${file.filename}`);
+  if (req.files.length > 0) filteredBody.images = req.files.map((file) => `/image/posts/${file.filename}`);
 
   const updatedPost = await Post.findByIdAndUpdate(req.params.id, filteredBody, { new: true, runValidators: true });
 
@@ -92,10 +92,12 @@ export const deletePost = catchAsync(async (req, res, next) => {
 });
 
 export const deleteMyPost = catchAsync(async (req, res, next) => {
-  const post = await Post.findByIdAndDelete(req?.params?.id);
+  const currentPost: any = await Post.findById(req?.params?.id);
 
+  if (req?.user?.id !== currentPost?.userId) return next(new AppError('You can delete only your post.', 403));
+
+  const post = await Post.findByIdAndDelete(req?.params?.id);
   if (!post) return next(new AppError('No post found with that id.', 404));
-  if (req.user.id !== post.userId) return next(new AppError('You can delete only your post.', 403));
 
   res.status(204).json({
     status: 'success',

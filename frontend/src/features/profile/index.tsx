@@ -19,18 +19,20 @@ export function ProfilePage(props: ProfilePageProps) {
   const [reload, setReload] = useState(false);
 
   const { data: myTimelinePosts, refetch } = useQuery({
-    queryKey: ['getMyPosts'],
+    queryKey: ['getMyPosts', reload],
     queryFn: async () => await postApi.getMyTimeLine(),
   });
 
   const { mutate } = useMutation({
     mutationKey: ['deleteMyPost'],
     mutationFn: async (postId: string) => await postApi.deletePost(postId),
+    onSuccess: () => {
+      setReload(!reload);
+    },
   });
 
   const handleDeletePost = (postId: string) => {
     mutate(postId);
-    setReload(true);
   };
 
   return (
@@ -49,7 +51,14 @@ export function ProfilePage(props: ProfilePageProps) {
         <div className="flex-1">
           <CreatePost className="m-0" refetch={refetch} />
           {myTimelinePosts?.data?.posts.map((post, index) => (
-            <Feed key={post._id} {...post} post={post} onDelete={handleDeletePost} className="m-0 px-0 w-full" />
+            <Feed
+              key={post._id}
+              {...post}
+              post={post}
+              onDelete={handleDeletePost}
+              className="m-0 px-0 w-full"
+              refetchFn={() => setReload(!reload)}
+            />
           ))}
         </div>
       </div>
