@@ -1,73 +1,12 @@
+import { postApi } from '@/api/post';
 import { Feed } from '@/components/common/feed';
 import { CoverImage } from '@/components/cover-image';
 import { CreatePost } from '@/components/create-post';
 import { UserInfo } from '@/components/user-info';
-import { PostData, UserData } from '@/models';
-import * as React from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 
 export interface ProfilePageProps {}
-
-const user: UserData = {
-  id: '1',
-  email: 'thanhtungle@gmail.com',
-  username: 'Fan Page',
-  profilePicture: 'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-};
-
-const posts: PostData[] = [
-  {
-    id: 1,
-    description: 'This is description 1',
-    images: [
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-    ],
-    likes: ['123', '123'],
-  },
-  {
-    id: 2,
-    description: 'This is description 1',
-    images: [
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-    ],
-    likes: ['123', '123'],
-  },
-  {
-    id: 3,
-    description: 'This is description 1',
-    images: [
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-    ],
-    likes: ['123', '123'],
-  },
-  {
-    id: 4,
-    description: 'This is description 1',
-    images: [
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-    ],
-    likes: ['123', '123'],
-  },
-  {
-    id: 5,
-    description: 'This is description 1',
-    images: ['https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg'],
-    likes: ['123', '123'],
-  },
-];
 
 const userInfo = {
   work: 'ABC Company',
@@ -77,6 +16,25 @@ const userInfo = {
 };
 
 export function ProfilePage(props: ProfilePageProps) {
+  const [reload, setReload] = useState(false);
+
+  const { data: myTimelinePosts, refetch } = useQuery({
+    queryKey: ['getMyPosts', reload],
+    queryFn: async () => await postApi.getMyTimeLine(),
+  });
+
+  const { mutate } = useMutation({
+    mutationKey: ['deleteMyPost'],
+    mutationFn: async (postId: string) => await postApi.deletePost(postId),
+    onSuccess: () => {
+      setReload(!reload);
+    },
+  });
+
+  const handleDeletePost = (postId: string) => {
+    mutate(postId);
+  };
+
   return (
     <div className="container mx-auto max-w-screen-xl">
       <CoverImage />
@@ -91,9 +49,16 @@ export function ProfilePage(props: ProfilePageProps) {
           />
         </div>
         <div className="flex-1">
-          <CreatePost user={user} className="m-0" />
-          {posts.map((post, index) => (
-            <Feed key={post.id} user={user} {...post} post={post} className="m-0 px-0 w-full" />
+          <CreatePost className="m-0" refetch={refetch} />
+          {myTimelinePosts?.data?.posts.map((post, index) => (
+            <Feed
+              key={post._id}
+              {...post}
+              post={post}
+              onDelete={handleDeletePost}
+              className="m-0 px-0 w-full"
+              refetchFn={() => setReload(!reload)}
+            />
           ))}
         </div>
       </div>

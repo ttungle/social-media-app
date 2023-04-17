@@ -1,77 +1,35 @@
+import { postApi } from '@/api/post';
 import { Feed } from '@/components/common/feed';
 import { CreatePost } from '@/components/create-post';
-import { PostData, UserData } from '@/models';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 
 export interface HomePageProps {}
 
-const user: UserData = {
-  id: '1',
-  email: 'thanhtungle@gmail.com',
-  username: 'Fan Page',
-  profilePicture: 'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-};
-
-const posts: PostData[] = [
-  {
-    id: 1,
-    description: 'This is description 1',
-    images: [
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-    ],
-    likes: ['123', '123'],
-  },
-  {
-    id: 2,
-    description: 'This is description 1',
-    images: [
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-    ],
-    likes: ['123', '123'],
-  },
-  {
-    id: 3,
-    description: 'This is description 1',
-    images: [
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-    ],
-    likes: ['123', '123'],
-  },
-  {
-    id: 4,
-    description: 'This is description 1',
-    images: [
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-      'https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg',
-    ],
-    likes: ['123', '123'],
-  },
-  {
-    id: 5,
-    description: 'This is description 1',
-    images: ['https://demoda.vn/wp-content/uploads/2022/04/avatar-facebook-dep.jpg'],
-    likes: ['123', '123'],
-  },
-];
-
 export function HomePage(props: HomePageProps) {
+  const [reload, setReload] = useState(false);
+  const { data: timelinePosts, refetch } = useQuery({
+    queryKey: ['getTimelinePosts', reload],
+    queryFn: async () => await postApi.getTimelinePost(),
+  });
+
+  const { mutate } = useMutation({
+    mutationKey: ['deleteMyHomePost'],
+    mutationFn: async (postId: string) => await postApi.deletePost(postId),
+    onSuccess: () => {
+      setReload(!reload);
+    },
+  });
+
+  const handleDeletePost = (postId: string) => {
+    mutate(postId);
+  };
+
   return (
     <>
-      <CreatePost user={user} />
-      {posts.map((post, index) => (
-        <Feed key={post.id} user={user} {...post} post={post} />
+      <CreatePost refetch={refetch} />
+      {timelinePosts?.data?.posts.map((post, index) => (
+        <Feed key={index} {...post} post={post} refetchFn={() => setReload(!reload)} onDelete={handleDeletePost} />
       ))}
     </>
   );

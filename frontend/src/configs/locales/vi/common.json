@@ -9,10 +9,16 @@
         "seeAll": "Xem tất cả",
         "edit": "Chỉnh sửa",
         "createAccount": "Tạo tài khoản mới",
-        "login": "Đăng nhập"
+        "login": "Đăng nhập",
+        "post": "Đăng"
     },
     "feed": {
         "likedInfo": "Bạn và",
         "likedOthers": "người khác"
+    },
+    "createPost": {
+        "dialogTitle": "Tạo bài viết",
+        "placeholder": "Bạn đang nghĩ gì,",
+        "addToPostDesc": "Thêm vào bài viết của bạn"
     }
 }

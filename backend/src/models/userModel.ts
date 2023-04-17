@@ -63,7 +63,7 @@ const userSchema = new mongoose.Schema<UserDocument>(
     passwordResetExpires: Date,
     profilePicture: {
       type: String,
-      default: '',
+      default: '/image/users/default.jpeg',
     },
     coverPicture: {
       type: String,

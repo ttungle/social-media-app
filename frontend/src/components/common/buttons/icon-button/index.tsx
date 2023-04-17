@@ -4,10 +4,11 @@ export interface IconButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
   className?: string;
+  ref?: any;
 }
 
 export function IconButton(props: IconButtonProps) {
-  const { children, onClick, className = '' } = props;
+  const { children, onClick, className = '', ...resProps } = props;
 
   const handleClick = () => {
     if (!onClick) return;
@@ -16,7 +17,7 @@ export function IconButton(props: IconButtonProps) {
   };
 
   return (
-    <button className={`text-gray-100 p-4 ${className}`} onClick={handleClick}>
+    <button className={`${className}`} onClick={handleClick} {...resProps}>
       {children}
     </button>
   );

@@ -8,18 +8,24 @@ import {
   likePost,
   getTimeLine,
   getMyTimeLine,
+  uploadPostPhotos,
+  deleteMyPost,
 } from '../controllers/postController';
 import { limitToCurrentUser } from '../middlewares/authMiddleware';
 
 const router = express.Router();
 
 router.use(protect);
-router.route('/').post(createPost);
+router.route('/').post(uploadPostPhotos, createPost);
 router.put('/:id/like', likePost);
 router.get('/timeline', getTimeLine);
 router.get('/myTimeline', getMyTimeLine);
+router.delete('/deleteMyPost/:id', deleteMyPost);
 
-router.use(limitToCurrentUser);
-router.route('/:id').get(getPost).patch(updatePost).delete(deletePost);
+router
+  .route('/:id')
+  .get(limitToCurrentUser, getPost)
+  .patch(uploadPostPhotos, limitToCurrentUser, updatePost)
+  .delete(deletePost);
 
 export default router;

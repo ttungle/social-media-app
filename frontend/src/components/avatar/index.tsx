@@ -1,3 +1,4 @@
+import { getMediaUrl } from '@/utils/common';
 import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
 
@@ -23,7 +24,7 @@ export function Avatar(props: AvatarProps) {
     <>
       <div className="relative w-10 h-10 bg-gray-900 rounded-full" onClick={handleClick} style={{ ...style }}>
         <img
-          src={src}
+          src={getMediaUrl(src) ?? ''}
           alt={alt}
           className="w-full h-full rounded-full cursor-pointer hover:opacity-90 transition object-cover"
         />
