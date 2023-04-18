@@ -8,3 +8,17 @@ export interface UserData {
   followings?: Array<any>;
   status?: 'active' | 'inactive';
 }
+
+export interface UserFriendListResultData {
+  status: string;
+  data: {
+    friends: Array<UserFriendListData>;
+  };
+}
+
+export interface UserFriendListData {
+  id: string;
+  username: string;
+  profilePicture: string;
+  status?: 'active' | 'inactive';
+}

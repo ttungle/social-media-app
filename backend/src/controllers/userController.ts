@@ -135,3 +135,26 @@ export const unFollowUser = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+export const getFriendList = catchAsync(async (req, res, next) => {
+  const currentUser = await User.findById(req.params.userId);
+
+  if (!currentUser) return next(new AppError('No user found with that id.', 404));
+
+  const followingUsers = await Promise.all(currentUser?.followings.map((userId) => User.findById(userId)));
+
+  const friends = followingUsers
+    .filter((x) => x)
+    .map((friend) => ({
+      id: friend?.id,
+      username: friend?.username,
+      profilePicture: friend?.profilePicture,
+    }));
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      friends,
+    },
+  });
+});

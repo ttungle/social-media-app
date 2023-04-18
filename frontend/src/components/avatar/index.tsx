@@ -29,13 +29,15 @@ export function Avatar(props: AvatarProps) {
           className="w-full h-full rounded-full cursor-pointer hover:opacity-90 transition object-cover"
         />
 
-        <span
-          className={clsx('absolute bottom-0 right-0 w-3 h-3 rounded-full', {
-            'bg-green-500': status === 'active',
-            'bg-gray-400': status === 'inactive',
-            'border-2 border-white': status,
-          })}
-        ></span>
+        {status && (
+          <span
+            className={clsx('absolute bottom-0 right-0 w-3 h-3 rounded-full', {
+              'bg-green-500': status === 'active',
+              'bg-gray-400': status === 'inactive',
+              'border-2 border-white': status,
+            })}
+          ></span>
+        )}
       </div>
     </>
   );

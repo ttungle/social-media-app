@@ -1,9 +1,9 @@
-import { UserData } from '@/models';
+import { UserFriendListData } from '@/models';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { AvatarWithText } from '../avatar-with-text';
 
 export interface ContactListProps {
-  users: Array<UserData>;
+  users: Array<UserFriendListData>;
 }
 
 export function ContactList({ users }: ContactListProps) {
