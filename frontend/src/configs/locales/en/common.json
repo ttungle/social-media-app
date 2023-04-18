@@ -14,7 +14,8 @@
     },
     "feed": {
         "likedInfo": "You and",
-        "likedOthers": "others"
+        "likedOthers": "others",
+        "likedYou": "You"
     },
     "createPost": {
         "dialogTitle": "Create post",

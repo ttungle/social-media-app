@@ -29,7 +29,7 @@ export function Feed(props: FeedProps) {
   const { t } = useTranslation();
   const { user } = useAuthContext();
   const [openMenu, setOpenMenu] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(() => post.likes.includes(user?._id!));
   const [showCreatePostDialog, setShowCreatePostDialog] = useState(false);
   const refElement = useRef<any>(null);
 
@@ -45,7 +45,15 @@ export function Feed(props: FeedProps) {
     },
   });
 
-  const numberOfLikes = useMemo(() => (Array.isArray(post.likes) ? post.likes.length : null), [post]);
+  const { mutate: toggleLike } = useMutation({
+    mutationKey: ['toggleLikePost'],
+    mutationFn: async (postId: string) => await postApi.likePost(postId),
+  });
+
+  const numberOfLikes = useMemo(
+    () => (Array.isArray(post.likes) ? post.likes.filter((item) => item !== user?._id).length : null),
+    [post]
+  );
   const numberOfComments = useMemo(() => (Array.isArray(post.comments) ? post.comments.length : null), [post]);
   const numberOfShares = useMemo(() => (Array.isArray(post.shares) ? post.shares.length : null), [post]);
 
@@ -55,6 +63,7 @@ export function Feed(props: FeedProps) {
 
   const handleLikeClick = () => {
     setIsLiked(!isLiked);
+    toggleLike(post._id);
   };
 
   const handleDeleteClick = () => {
@@ -115,7 +124,12 @@ export function Feed(props: FeedProps) {
               <AiFillLike className="text-white text-xs" />
             </button>
             <span className="text-sm ml-2 text-gray-500">
-              {isLiked ? `${t('feed.likedInfo')} ${numberOfLikes} ${t('feed.likedOthers')}` : numberOfLikes}
+              {isLiked &&
+                numberOfLikes !== null &&
+                numberOfLikes > 0 &&
+                `${t('feed.likedInfo')} ${numberOfLikes} ${t('feed.likedOthers')}`}
+
+              {isLiked && numberOfLikes === 0 && `${t('feed.likedYou')}`}
             </span>
           </div>
           <div>

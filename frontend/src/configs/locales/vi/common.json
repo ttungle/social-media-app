@@ -14,7 +14,8 @@
     },
     "feed": {
         "likedInfo": "Bạn và",
-        "likedOthers": "người khác"
+        "likedOthers": "người khác",
+        "likedYou": "Bạn"
     },
     "createPost": {
         "dialogTitle": "Tạo bài viết",

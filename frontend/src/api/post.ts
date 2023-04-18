@@ -26,4 +26,9 @@ export const postApi = {
     const url = `/posts/deleteMyPost/${postId}`;
     return axiosClient.delete(url);
   },
+
+  likePost(postId: string) {
+    const url = `/posts/${postId}/like`;
+    return axiosClient.put(url);
+  },
 };

@@ -21,6 +21,7 @@ export function ProfilePage(props: ProfilePageProps) {
   const { data: myTimelinePosts, refetch } = useQuery({
     queryKey: ['getMyPosts', reload],
     queryFn: async () => await postApi.getMyTimeLine(),
+    cacheTime: 0,
   });
 
   const { mutate } = useMutation({

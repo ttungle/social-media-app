@@ -11,6 +11,7 @@ export function HomePage(props: HomePageProps) {
   const { data: timelinePosts, refetch } = useQuery({
     queryKey: ['getTimelinePosts', reload],
     queryFn: async () => await postApi.getTimelinePost(),
+    cacheTime: 0,
   });
 
   const { mutate } = useMutation({
