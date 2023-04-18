@@ -1,5 +1,5 @@
 export interface PostData {
-  _id: string | number;
+  _id: string;
   userId: string;
   description: string;
   images: Array<string>;
