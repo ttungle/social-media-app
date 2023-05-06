@@ -20,11 +20,15 @@ export function SideBar({ user, showMiniBar, groupData }: SideBarProps) {
   const navigate = useNavigate();
 
   const handleUserClick = () => {
-    navigate(`${BASE_ROUTEs.profile}/${user?.id}`);
+    navigate(`${BASE_ROUTEs.profile}/${user?._id}`);
   };
 
   const handleHomeClick = () => {
     navigate(BASE_ROUTEs.home);
+  };
+
+  const handleFriendClick = () => {
+    navigate(BASE_ROUTEs.friends);
   };
 
   return (
@@ -54,7 +58,7 @@ export function SideBar({ user, showMiniBar, groupData }: SideBarProps) {
                 <span className="ml-4 text-sm font-medium">{t('sideBar.watch')}</span>
               </li>
 
-              <li className="flex items-center justify-start hover:cursor-pointer my-5 ">
+              <li onClick={handleFriendClick} className="flex items-center justify-start hover:cursor-pointer my-5 ">
                 <MdGroup style={{ fontSize: '1.25rem', fill: 'url(#blue-gradient)' }} />
                 <span className="ml-4 text-sm font-medium">{t('sideBar.friend')}</span>
               </li>
@@ -105,7 +109,7 @@ export function SideBar({ user, showMiniBar, groupData }: SideBarProps) {
             <li onClick={handleHomeClick} className="flex items-center justify-start hover:cursor-pointer my-4 ">
               <AiFillHome style={{ fontSize: '1.25rem', color: '#007def' }} />
             </li>
-            <li className="flex items-center justify-start hover:cursor-pointer my-4 ">
+            <li onClick={handleUserClick} className="flex items-center justify-start hover:cursor-pointer my-4 ">
               <FaUserAlt
                 style={{
                   fontSize: '1.25rem',
@@ -120,7 +124,7 @@ export function SideBar({ user, showMiniBar, groupData }: SideBarProps) {
               <BsFillPlayBtnFill style={{ fontSize: '1.25rem', fill: 'url(#blue-gradient)' }} />
             </li>
 
-            <li className="flex items-center justify-start hover:cursor-pointer my-4 ">
+            <li onClick={handleFriendClick} className="flex items-center justify-start hover:cursor-pointer my-4 ">
               <MdGroup style={{ fontSize: '1.25rem', fill: 'url(#blue-gradient)' }} />
             </li>
 

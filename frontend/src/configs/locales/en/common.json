@@ -10,7 +10,11 @@
         "edit": "Edit",
         "createAccount": "Create new account",
         "login": "Log in",
-        "post": "Post"
+        "post": "Post",
+        "follow": "Follow",
+        "following": "Following",
+        "remove": "Remove",
+        "addCoverPhoto": "Add Cover Photo"
     },
     "feed": {
         "likedInfo": "You and",

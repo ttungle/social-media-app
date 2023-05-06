@@ -3,4 +3,5 @@ export const BASE_ROUTEs = {
   profile: '/profile',
   login: '/login',
   register: '/register',
+  friends: '/friends',
 };

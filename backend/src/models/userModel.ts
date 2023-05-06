@@ -124,6 +124,11 @@ userSchema.pre('save', function (next) {
   next();
 });
 
+userSchema.pre(/^find/, async function(next) {
+  this.select(["-passwordChangeAt", "-updatedAt", "-__v"]);
+  next();
+});
+
 userSchema.methods.checkPassword = async function (inputPassword, encryptedPassword) {
   return await bcrypt.compare(inputPassword, encryptedPassword);
 };

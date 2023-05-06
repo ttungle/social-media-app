@@ -22,3 +22,10 @@ export interface UserFriendListData {
   profilePicture: string;
   status?: 'active' | 'inactive';
 }
+
+export interface FriendProfileResultData {
+  status: string;
+  data: {
+    user: UserData;
+  };
+}
