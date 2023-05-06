@@ -1,9 +1,10 @@
-import { UserData } from '@/models';
+import { UserFriendListData } from '@/models';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { AvatarWithText } from '../avatar-with-text';
+import { BASE_ROUTEs } from '@/constants/base-routes';
 
 export interface ContactListProps {
-  users: Array<UserData>;
+  users: Array<UserFriendListData>;
 }
 
 export function ContactList({ users }: ContactListProps) {
@@ -20,6 +21,7 @@ export function ContactList({ users }: ContactListProps) {
             name={user?.username}
             src={user?.profilePicture ?? ''}
             status={user?.status}
+            link={`${BASE_ROUTEs.friends}/${user?.id}`}
             className="my-3"
           />
         ))}

@@ -10,7 +10,11 @@
         "edit": "Chỉnh sửa",
         "createAccount": "Tạo tài khoản mới",
         "login": "Đăng nhập",
-        "post": "Đăng"
+        "post": "Đăng",
+        "follow": "Theo dõi",
+        "following": "Đang theo dõi",
+        "remove": "Xóa",
+        "addCoverPhoto": "Thêm Ảnh Bìa"
     },
     "feed": {
         "likedInfo": "Bạn và",

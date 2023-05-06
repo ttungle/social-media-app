@@ -1,4 +1,5 @@
 import { postApi } from '@/api/post';
+import { userApi } from '@/api/user';
 import { Feed } from '@/components/common/feed';
 import { CoverImage } from '@/components/cover-image';
 import { CreatePost } from '@/components/create-post';
@@ -6,7 +7,7 @@ import { UserInfo } from '@/components/user-info';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
-export interface ProfilePageProps {}
+export interface MyProfilePageProps {}
 
 const userInfo = {
   work: 'ABC Company',
@@ -15,8 +16,13 @@ const userInfo = {
   follow: '1K people',
 };
 
-export function ProfilePage(props: ProfilePageProps) {
+export function MyProfilePage(props: MyProfilePageProps) {
   const [reload, setReload] = useState(false);
+
+  const { data: useProfile } = useQuery({
+    queryKey: ['getUserProfile'],
+    queryFn: async () => await userApi.getMe(),
+  });
 
   const { data: myTimelinePosts, refetch } = useQuery({
     queryKey: ['getMyPosts', reload],
@@ -38,7 +44,7 @@ export function ProfilePage(props: ProfilePageProps) {
 
   return (
     <div className="container mx-auto max-w-screen-xl">
-      <CoverImage />
+      <CoverImage userData={useProfile?.data?.user} isMyProfile={true} />
 
       <div className="flex flex-nowrap px-9 flex-col xl:flex-row">
         <div className="w-full xl:max-w-[500px] mr-4 mt-4">

@@ -8,6 +8,8 @@ import {
   deleteMe,
   followUser,
   unFollowUser,
+  getFriendList,
+  getSuggestionFriends
 } from '../controllers/userController';
 import { protect, updatePassword } from '../controllers/authController';
 import { restrictTo } from '../middlewares/authMiddleware';
@@ -23,6 +25,8 @@ router.delete('/deleteMe', deleteMe);
 
 router.put('/:id/follow', followUser);
 router.put('/:id/unfollow', unFollowUser);
+router.get('/friends', getSuggestionFriends);
+router.get('/friends/:userId', getFriendList);
 
 router.use(restrictTo('admin'));
 router.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
