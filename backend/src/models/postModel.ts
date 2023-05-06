@@ -5,6 +5,7 @@ export interface PostDocument extends Document {
   description: string;
   images: Array<string>;
   likes: any;
+  privacy: 'public' | 'friends' | 'onlyMe';
 }
 
 const postSchema = new mongoose.Schema<PostDocument>(
@@ -25,9 +26,19 @@ const postSchema = new mongoose.Schema<PostDocument>(
       type: Array,
       default: [],
     },
+    privacy: {
+      type: String,
+      enum: ['public', 'friends', 'onlyMe'],
+      default: 'public'
+    }
   },
   { timestamps: true }
 );
+
+postSchema.pre(/^find/, async function(next) {
+  this.sort("-createdAt");
+  next();
+});
 
 const Post = mongoose.model<PostDocument>('Post', postSchema);
 

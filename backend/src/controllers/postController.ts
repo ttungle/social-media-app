@@ -1,8 +1,9 @@
 import multer from 'multer';
 import Post from '../models/postModel';
-import { filterObject } from '../utils';
+import { calculateMetaData, filterObject } from '../utils';
 import { AppError } from './../utils/appError';
 import { catchAsync } from './../utils/catchAsync';
+import APIFeatures from '../utils/apiFeatures';
 
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -130,27 +131,45 @@ export const likePost = catchAsync(async (req, res, next) => {
 });
 
 export const getTimeLine = catchAsync(async (req, res, next) => {
-  const currentUserPosts = await Post.find({ userId: req.user.id });
-  const friendPosts = await Post.find({ userId: { $in: req.user.followings } });
-  const posts = [...currentUserPosts, ...friendPosts];
+  const postQuery = Post.find({ $or: [{ userId: req.user.id }, { userId: { $in: req.user.followings } }] });
+  const apiFeature = new APIFeatures(postQuery, req.query).paginate();
+  const posts = await apiFeature.query;
+  const meta = calculateMetaData(req.query, posts.length);
 
   res.status(200).json({
     status: 'success',
     data: {
       posts,
     },
-    total: posts.length,
+    meta,
   });
 });
 
 export const getMyTimeLine = catchAsync(async (req, res, next) => {
-  const posts = await Post.find({ userId: req.user.id });
+  const postQuery = Post.find({ userId: req.user.id });
+  const apiFeature = new APIFeatures(postQuery, req.query).paginate();
+  const posts = await apiFeature.query;
+  const totalPostCount = await Post.countDocuments({ userId: req.user.id });
+  const meta = calculateMetaData(req.query, totalPostCount);
 
   res.status(200).json({
     status: 'success',
-    data: {
-      posts,
-    },
-    total: posts.length,
+    data: { posts },
+    meta,
+  });
+});
+
+export const getUserTimeline = catchAsync(async (req, res, next) => {
+  const postQuery = Post.find({ userId: req.params.userId });
+
+  const apiFeature = new APIFeatures(postQuery, req.query).paginate();
+  const posts = await apiFeature.query;
+  const totalPostCount = await Post.countDocuments({ userId: req.params.userId });
+  const meta = calculateMetaData(req.query, totalPostCount);
+
+  res.status(200).json({
+    status: 'success',
+    data: { posts },
+    meta,
   });
 });

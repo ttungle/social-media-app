@@ -1,6 +1,6 @@
 import { AppError } from './../utils/appError';
 import User from '../models/userModel';
-import { catchAsync, filterObject } from '../utils';
+import { calculateMetaData, catchAsync, filterObject } from '../utils';
 import APIFeatures from '../utils/apiFeatures';
 
 export const getMe = catchAsync(async (req, res, next) => {
@@ -161,24 +161,21 @@ export const getFriendList = catchAsync(async (req, res, next) => {
 });
 
 export const getSuggestionFriends = catchAsync(async (req, res, next) => {
-  const filter: {[key: string]: any} = {};
-  filter.role = "user";
-  filter.followers = {$nin: req.user.id};
+  const filter: { [key: string]: any } = {};
+  filter.role = 'user';
+  filter.followers = { $nin: req.user.id };
 
   const userQuery = User.find(filter);
   const apiFeature = new APIFeatures(userQuery, req.query).paginate();
   const userDoc = await apiFeature.query;
-  const totalCount = (await User.find(filter)).length || 0;
+  const totalUserCount = await User.countDocuments(filter);
+  const meta = calculateMetaData(req.query, totalUserCount);
 
   res.status(200).json({
     status: 'success',
     data: {
-      users: userDoc
+      users: userDoc,
     },
-    meta: {
-      page: req.query.page * 1 || 1,
-      pageSize: req.query.pageSize * 1 || 50,
-      totalCount
-    }
+    meta,
   });
 });
