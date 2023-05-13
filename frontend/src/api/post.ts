@@ -12,6 +12,11 @@ export const postApi = {
     return axiosClient.get(url);
   },
 
+  getUserTimeline(userId: string): Promise<TimelinePostResultData> {
+    const url = `/posts/${userId}/timeline`;
+    return axiosClient.get(url);
+  },
+
   createPost(payload: any) {
     const url = '/posts';
     return axiosClient.post(url, payload, { headers: { 'Content-Type': 'multipart/form-data' } });

@@ -37,7 +37,7 @@ export const createPost = catchAsync(async (req, res, next) => {
 
   if (req.files) filteredBody.images = req.files.map((file) => `/image/posts/${file.filename}`);
   const postData = {
-    userId: req?.user?.id,
+    author: req?.user?.id,
     ...filteredBody,
   };
 
@@ -95,7 +95,7 @@ export const deletePost = catchAsync(async (req, res, next) => {
 export const deleteMyPost = catchAsync(async (req, res, next) => {
   const currentPost: any = await Post.findById(req?.params?.id);
 
-  if (req?.user?.id !== currentPost?.userId) return next(new AppError('You can delete only your post.', 403));
+  if (req?.user?.id !== currentPost?.author.id) return next(new AppError('You can delete only your post.', 403));
 
   const post = await Post.findByIdAndDelete(req?.params?.id);
   if (!post) return next(new AppError('No post found with that id.', 404));
@@ -131,7 +131,7 @@ export const likePost = catchAsync(async (req, res, next) => {
 });
 
 export const getTimeLine = catchAsync(async (req, res, next) => {
-  const postQuery = Post.find({ $or: [{ userId: req.user.id }, { userId: { $in: req.user.followings } }] });
+  const postQuery = Post.find({ $or: [{ author: req.user.id }, { author: { $in: req.user.followings } }] });
   const apiFeature = new APIFeatures(postQuery, req.query).paginate();
   const posts = await apiFeature.query;
   const meta = calculateMetaData(req.query, posts.length);
@@ -146,10 +146,10 @@ export const getTimeLine = catchAsync(async (req, res, next) => {
 });
 
 export const getMyTimeLine = catchAsync(async (req, res, next) => {
-  const postQuery = Post.find({ userId: req.user.id });
+  const postQuery = Post.find({ author: req.user.id });
   const apiFeature = new APIFeatures(postQuery, req.query).paginate();
   const posts = await apiFeature.query;
-  const totalPostCount = await Post.countDocuments({ userId: req.user.id });
+  const totalPostCount = await Post.countDocuments({ author: req.user.id });
   const meta = calculateMetaData(req.query, totalPostCount);
 
   res.status(200).json({
@@ -160,11 +160,11 @@ export const getMyTimeLine = catchAsync(async (req, res, next) => {
 });
 
 export const getUserTimeline = catchAsync(async (req, res, next) => {
-  const postQuery = Post.find({ userId: req.params.userId });
+  const postQuery = Post.find({ author: req.params.userId });
 
   const apiFeature = new APIFeatures(postQuery, req.query).paginate();
   const posts = await apiFeature.query;
-  const totalPostCount = await Post.countDocuments({ userId: req.params.userId });
+  const totalPostCount = await Post.countDocuments({ author: req.params.userId });
   const meta = calculateMetaData(req.query, totalPostCount);
 
   res.status(200).json({

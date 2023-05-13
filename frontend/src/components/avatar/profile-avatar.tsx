@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { HiCamera } from 'react-icons/hi2';
-import { getMediaUrl } from '@/utils/common';
+import { getMediaUrl } from '@/utils';
 
 export interface ProfileAvatarProps {
   src: string;
