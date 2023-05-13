@@ -20,16 +20,16 @@ export default function FriendProfilePage(props: FriendProfilePageProps) {
   const params = useParams();
   const [reload, setReload] = React.useState(false);
 
-  const { data: myTimelinePosts } = useQuery({
-    queryKey: ['getFriendPosts', reload],
-    queryFn: async () => await postApi.getMyTimeLine(),
-    cacheTime: 0,
-  });
-
   const { data: userProfile } = useQuery({
     queryKey: ['getFriendProfile', params.id],
     queryFn: async () => await userApi.getFriendProfile(params?.id!),
     enabled: Boolean(params?.id),
+  });
+
+  const { data: timelinePosts } = useQuery({
+    queryKey: ['getFriendPosts', reload, params?.id],
+    queryFn: async () => await postApi.getUserTimeline(params?.id!),
+    cacheTime: 0,
   });
 
   return (
@@ -46,7 +46,7 @@ export default function FriendProfilePage(props: FriendProfilePageProps) {
           />
         </div>
         <div className="flex-1">
-          {myTimelinePosts?.data?.posts.map((post, index) => (
+          {timelinePosts?.data?.posts.map((post, index) => (
             <Feed
               key={post._id}
               {...post}

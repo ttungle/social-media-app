@@ -8,7 +8,7 @@ export const restrictTo = (...roles) =>
   });
 
 export const limitToCurrentUser = (req, res, next) => {
-  if (req.method !== 'GET' && req.user.id !== req.body.userId) next(new AppError('You can update only your post', 403));
+  if (req.method !== 'GET' && req.user.id !== req.body.author) next(new AppError('You can update only your post', 403));
 
   next();
 };

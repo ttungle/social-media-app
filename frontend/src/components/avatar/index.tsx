@@ -1,4 +1,4 @@
-import { getMediaUrl } from '@/utils/common';
+import { getMediaUrl } from '@/utils';
 import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
 

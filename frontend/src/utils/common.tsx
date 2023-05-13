@@ -1,3 +1,12 @@
+const timeOptions = {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+} as Intl.DateTimeFormatOptions;
+
 export function formatStringWithMaxLength(content: string, maxLength: number) {
   if (content === undefined) return '';
   if (maxLength < 0 || content.length <= maxLength) return content;
@@ -5,16 +14,20 @@ export function formatStringWithMaxLength(content: string, maxLength: number) {
   return content.substring(0, maxLength) + '...';
 }
 
-export function getBaseApiURL(path?: string) {
-  return Boolean(path) ? `${import.meta.env.VITE_BASE_API_URL}/api${path}` : `${import.meta.env.VITE_BASE_API_URL}/api`;
-}
+export function formatDateString(
+  dateString: string | undefined,
+  options: Intl.DateTimeFormatOptions | 'hide-time' = timeOptions,
+  locale: Intl.LocalesArgument = 'en',
+) {
+  if (!dateString) return '';
 
-export function getMediaUrl(path: string | undefined) {
-  if (!path) return null;
+  const date = new Date(dateString);
+  if (options === 'hide-time') {
+    const hideTimeOptions = { dateStyle: 'long' } as Intl.DateTimeFormatOptions;
+    return date.toLocaleDateString(locale, hideTimeOptions);
+  }
 
-  if (path.startsWith('http')) return path;
-
-  return `${import.meta.env.VITE_BASE_API_URL}${path}`;
+  return date.toLocaleDateString(locale, options);
 }
 
 export function filterObject(obj: any, ...allowFields: any[]) {

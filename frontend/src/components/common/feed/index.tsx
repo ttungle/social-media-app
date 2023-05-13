@@ -1,7 +1,11 @@
+import { postApi } from '@/api/post';
+import { CreatePostDialog } from '@/components/dialogs/create-post-dialog';
 import { useAuthContext } from '@/context';
 import { PostData } from '@/models';
+import { useMutation } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { useMemo, useRef, useState } from 'react';
+import { FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
 import { BiDotsVerticalRounded, BiMessage } from 'react-icons/bi';
@@ -12,10 +16,6 @@ import { AvatarWithText } from '../../avatar-with-text';
 import { ImageGallery } from '../../image-gallery';
 import { IconButton } from '../buttons/icon-button';
 import { PopperWrapper } from '../popper-wrapper';
-import { CreatePostDialog } from '@/components/dialogs/create-post-dialog';
-import { FieldValues } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
-import { postApi } from '@/api/post';
 
 export interface FeedProps {
   post: PostData;
@@ -87,7 +87,7 @@ export function Feed(props: FeedProps) {
       images?.forEach((image: File) => formData.append('images', image, `${image.name}`));
     }
 
-    if (user?._id) formData.append('userId', user._id);
+    if (user?._id) formData.append('author', user._id);
 
     for (const [key, value] of Object.entries(restValue)) {
       formData.append(key, value as any);
@@ -103,7 +103,13 @@ export function Feed(props: FeedProps) {
     <>
       <div className={`max-w-2xl mx-auto mt-4 rounded-lg bg-white shadow ${className}`}>
         <div className="flex items-center justify-between px-4 pt-3">
-          <AvatarWithText src={user?.profilePicture ?? ''} name={user?.username ?? ''} time="2d" privacy="public" />
+          <AvatarWithText
+            src={post?.author?.profilePicture ?? ''}
+            name={post?.author?.username ?? ''}
+            time={post?.createdAt}
+            privacy={post?.privacy}
+          />
+
           <div ref={refElement}>
             <IconButton onClick={handleOpenMenuClick} className="p-2.5 text-gray-900 rounded-full">
               <BiDotsVerticalRounded className="text-lg" />
@@ -121,19 +127,21 @@ export function Feed(props: FeedProps) {
         <ImageGallery images={post?.images} />
 
         <div className="flex justify-between items-center py-3 px-4">
-          <div>
-            <button className="p-1 bg-gradient-to-t from-blue-700 to-sky-400 rounded-full">
-              <AiFillLike className="text-white text-xs" />
-            </button>
-            <span className="text-sm ml-2 text-gray-500">
-              {isLiked &&
-                numberOfLikes !== null &&
-                numberOfLikes > 0 &&
-                `${t('feed.likedInfo')} ${numberOfLikes} ${t('feed.likedOthers')}`}
+          {((numberOfLikes !== null && numberOfLikes > 0) || isLiked) && (
+            <div>
+              <button className="p-1 bg-gradient-to-t from-blue-700 to-sky-400 rounded-full">
+                <AiFillLike className="text-white text-xs" />
+              </button>
+              <span className="text-sm ml-2 text-gray-500">
+                {isLiked &&
+                  numberOfLikes !== null &&
+                  numberOfLikes > 0 &&
+                  `${t('feed.likedInfo')} ${numberOfLikes} ${t('feed.likedOthers')}`}
 
-              {isLiked && numberOfLikes === 0 && `${t('feed.likedYou')}`}
-            </span>
-          </div>
+                {isLiked && numberOfLikes === 0 && `${t('feed.likedYou')}`}
+              </span>
+            </div>
+          )}
           <div>
             <span className="text-sm text-gray-500 mr-4">{numberOfComments}</span>
             <span className="text-sm text-gray-500">{numberOfShares}</span>

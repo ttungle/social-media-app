@@ -1,7 +1,8 @@
 import mongoose, { Document } from 'mongoose';
+import { UserDocument } from './userModel';
 
 export interface PostDocument extends Document {
-  userId: string;
+  author: UserDocument;
   description: string;
   images: Array<string>;
   likes: any;
@@ -10,9 +11,9 @@ export interface PostDocument extends Document {
 
 const postSchema = new mongoose.Schema<PostDocument>(
   {
-    userId: {
-      type: String,
-      require: [true, 'Please provide userId.'],
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
     },
     description: {
       type: String,
@@ -29,14 +30,18 @@ const postSchema = new mongoose.Schema<PostDocument>(
     privacy: {
       type: String,
       enum: ['public', 'friends', 'onlyMe'],
-      default: 'public'
-    }
+      default: 'public',
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
 
-postSchema.pre(/^find/, async function(next) {
-  this.sort("-createdAt");
+postSchema.pre(/^find/, async function (next) {
+  this.sort('-createdAt').populate({ path: 'author', select: ['-followers', '-followings', '-role', '-createdAt'] });
   next();
 });
 

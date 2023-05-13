@@ -1,4 +1,4 @@
-import { getMediaUrl } from '@/utils/common';
+import { getMediaUrl } from '@/utils';
 import clsx from 'clsx';
 import React, { useMemo } from 'react';
 

@@ -1,7 +1,7 @@
 import { userApi } from '@/api/user';
 import { useAuthContext } from '@/context';
 import { UserData } from '@/models';
-import { getMediaUrl } from '@/utils/common';
+import { getMediaUrl } from '@/utils';
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';

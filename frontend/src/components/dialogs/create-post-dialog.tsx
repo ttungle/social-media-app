@@ -1,5 +1,5 @@
 import { PostData, UserData } from '@/models';
-import { getMediaUrl } from '@/utils/common';
+import { getMediaUrl } from '@/utils';
 import { useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';

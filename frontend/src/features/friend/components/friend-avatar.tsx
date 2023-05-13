@@ -1,5 +1,5 @@
 import { BASE_ROUTEs } from '@/constants/base-routes';
-import { getMediaUrl } from '@/utils/common';
+import { getMediaUrl } from '@/utils';
 import { useNavigate } from 'react-router-dom';
 
 export interface FriendAvatarProps {

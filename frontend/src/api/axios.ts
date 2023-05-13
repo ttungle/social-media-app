@@ -1,5 +1,5 @@
 import { AuthURLList } from '@/models';
-import { getBaseApiURL } from '@/utils/common';
+import { getBaseApiURL } from '@/utils';
 import axios, { AxiosRequestHeaders } from 'axios';
 
 const axiosClient = axios.create({
