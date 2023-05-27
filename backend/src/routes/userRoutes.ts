@@ -9,7 +9,7 @@ import {
   followUser,
   unFollowUser,
   getFriendList,
-  getSuggestionFriends
+  getSuggestionFriends,
 } from '../controllers/userController';
 import { protect, updatePassword } from '../controllers/authController';
 import { restrictTo } from '../middlewares/authMiddleware';
@@ -18,10 +18,8 @@ const router = express.Router();
 
 router.use(protect);
 
-router.get('/me', getMe, getUser);
-router.patch('/updateMe', updateMe);
+router.route('/me').get(getMe, getUser).patch(updateMe).delete(deleteMe);
 router.patch('/updateMyPassword', updatePassword);
-router.delete('/deleteMe', deleteMe);
 
 router.put('/:id/follow', followUser);
 router.put('/:id/unfollow', unFollowUser);
