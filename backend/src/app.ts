@@ -5,6 +5,8 @@ import morgan from 'morgan';
 import path from 'path';
 import globalErrorHandler from './controllers/errorController';
 import apiRoute from './routes/router';
+import * as swaggerDoc from './docs/swagger.json';
+import swaggerUI from 'swagger-ui-express';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -24,6 +26,7 @@ app.use(express.json({ limit: '10kb' }));
 app.use(express.static(publicPath));
 
 app.use('/api/v1', apiRoute);
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 
 app.get('/', (req, res) => {
   res.status(200).json({
