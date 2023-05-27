@@ -14,7 +14,10 @@
         "follow": "Follow",
         "following": "Following",
         "remove": "Remove",
-        "addCoverPhoto": "Add Cover Photo"
+        "addCoverPhoto": "Add Cover Photo",
+        "cancel": "Cancel",
+        "save": "Save",
+        "add": "Add"
     },
     "feed": {
         "likedInfo": "You and",

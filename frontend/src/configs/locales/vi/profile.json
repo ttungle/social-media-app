@@ -3,5 +3,16 @@
     "profileWork": "Làm việc tại",
     "profileLive": "Sống tại",
     "profileFrom": "Đến từ",
-    "profileFollow": "Theo dõi bởi"
+    "profileFollow": "Theo dõi bởi",
+    "editProfileDialog": {
+        "title": "Chỉnh sửa hồ sơ",
+        "profilePicture": "Ảnh đại diện",
+        "coverPhoto": "Ảnh bìa",
+        "bio": "Bio",
+        "profileHeading": "Chỉnh sửa giới thiệu của bạn",
+        "profileDescription": "Những chi tiết bạn chọn sẽ được công khai",
+        "work": "Công việc",
+        "currentCity": "Thành phố hiện tại",
+        "homeTown": "Quê"
+    }
 }

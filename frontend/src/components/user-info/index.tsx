@@ -19,10 +19,7 @@ export function UserInfo({ bio, userInfo }: UserInfoProps) {
   const { t } = useTranslation('profile');
   return (
     <div className="rounded-lg bg-white p-4">
-      <div className="flex justify-between items-center">
-        <p className="m-0 text-xl font-semibold">{t('profileTitle')}</p>
-        <button className="text-sm text-blue-500 hover:underline">{t('common:button.edit')}</button>
-      </div>
+      <p className="m-0 text-xl font-semibold">{t('profileTitle')}</p>
       <div>
         <p className="m-0 py-4 text-sm text-center border-b">{bio}</p>
 
