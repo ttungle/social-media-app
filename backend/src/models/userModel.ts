@@ -15,7 +15,6 @@ export interface UserDocument extends Document {
   followers: any;
   followings: any;
   role: 'admin' | 'user';
-  isAdmin: boolean;
   active: boolean;
   description: string;
   city: string;
@@ -124,8 +123,8 @@ userSchema.pre('save', function (next) {
   next();
 });
 
-userSchema.pre(/^find/, async function(next) {
-  this.select(["-passwordChangeAt", "-updatedAt", "-__v"]);
+userSchema.pre(/^find/, async function (next) {
+  this.select(['-passwordChangeAt', '-updatedAt', '-__v']);
   next();
 });
 

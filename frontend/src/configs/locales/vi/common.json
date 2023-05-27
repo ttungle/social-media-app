@@ -14,7 +14,10 @@
         "follow": "Theo dõi",
         "following": "Đang theo dõi",
         "remove": "Xóa",
-        "addCoverPhoto": "Thêm Ảnh Bìa"
+        "addCoverPhoto": "Thêm Ảnh Bìa",
+        "cancel": "Hủy",
+        "save": "Lưu",
+        "add": "Thêm"
     },
     "feed": {
         "likedInfo": "Bạn và",

@@ -17,9 +17,11 @@ export interface CoverImageProps {
   isMyProfile: boolean;
   userData?: UserData;
   className?: string;
+  onEditClick?: () => void;
 }
 
-export function CoverImage({ isMyProfile, userData, className = '' }: CoverImageProps) {
+export function CoverImage(props: CoverImageProps) {
+  const { isMyProfile, userData, className = '', onEditClick } = props;
   const { t } = useTranslation();
   const { user } = useAuthContext();
   const [isFollowing, setIsFollowing] = useState(() => userData?.followers?.includes(user?._id));
@@ -48,6 +50,11 @@ export function CoverImage({ isMyProfile, userData, className = '' }: CoverImage
     if (!isFollowing && userData?._id) followUser(userData?._id);
 
     if (isFollowing && userData?._id) unFollowUser(userData?._id);
+  };
+  
+  const handleEditClick = () => {
+    if (!onEditClick) return;
+    onEditClick();
   };
 
   return (
@@ -78,7 +85,7 @@ export function CoverImage({ isMyProfile, userData, className = '' }: CoverImage
 
               <ContainedButton className="bg-gray-300 ml-2">
                 <HiPencil className="text-lg" />
-                <span className="font-medium text-sm ml-1 text-gray-800">Edit profile</span>
+                <span onClick={handleEditClick} className="font-medium text-sm ml-1 text-gray-800">Edit profile</span>
               </ContainedButton>
             </div>
           )}

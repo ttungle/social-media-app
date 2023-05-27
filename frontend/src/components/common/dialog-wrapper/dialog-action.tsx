@@ -11,7 +11,7 @@ export function DialogAction({ children, align = 'right', className }: DialogAct
   return (
     <div
       className={clsx(
-        { 'sm:flex-row-reverse': align === 'right' },
+        { 'sm:flex-row justify-end': align === 'right' },
         { 'sm:flex-row': align === 'left' },
         { 'justify-center': align === 'center' },
         'px-4 py-3 sm:flex sm:px-6',

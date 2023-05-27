@@ -3,5 +3,16 @@
     "profileWork": "Works at",
     "profileLive": "Live in",
     "profileFrom": "From",
-    "profileFollow": "Followed by"
+    "profileFollow": "Followed by",
+    "editProfileDialog": {
+        "title": "Edit profile",
+        "profilePicture": "Profile Picture",
+        "coverPhoto": "Cover Photo",
+        "bio": "Bio",
+        "profileHeading": "Customize your intro",
+        "profileDescription": "Details you select will be public.",
+        "work": "Work",
+        "currentCity": "Current town/city",
+        "homeTown": "Home town"
+    }
 }
