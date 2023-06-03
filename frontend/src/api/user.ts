@@ -18,6 +18,11 @@ export const userApi = {
     return axiosClient.get(url);
   },
 
+  updateMe(payload: any): Promise<FriendProfileResultData> {
+    const url = '/users/me';
+    return axiosClient.patch(url, payload, { headers: { 'Content-Type': 'multipart/form-data' } });
+  },
+
   followUser(userId: string) {
     const url = `/users/${userId}/follow`;
     return axiosClient.put(url);
@@ -31,10 +36,10 @@ export const userApi = {
   getSuggestionFriends(query?: any) {
     const queryString = qs.stringify({
       page: query?.page ?? 1,
-      pageSize: query?.pageSize ?? 25
+      pageSize: query?.pageSize ?? 25,
     });
 
     const url = `/users/friends?${queryString}`;
     return axiosClient.get(url);
-  }
+  },
 };

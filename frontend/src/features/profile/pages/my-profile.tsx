@@ -10,18 +10,11 @@ import { EditProfileDialog } from '../components/edit-profile-dialog';
 
 export interface MyProfilePageProps {}
 
-const userInfo = {
-  work: 'ABC Company',
-  live: 'Ho Chi Minh City',
-  from: 'Ho Chi Minh City',
-  follow: '1K people',
-};
-
 export function MyProfilePage(props: MyProfilePageProps) {
   const [reload, setReload] = useState(false);
   const [isEditProfileOpen, setEditProfileOpen] = useState(false);
 
-  const { data: useProfile } = useQuery({
+  const { data: useProfile, refetch: refetchUserProfile } = useQuery({
     queryKey: ['getUserProfile'],
     queryFn: async () => await userApi.getMe(),
   });
@@ -40,6 +33,15 @@ export function MyProfilePage(props: MyProfilePageProps) {
     },
   });
 
+  const { mutate: updateMe } = useMutation({
+    mutationKey: ['updateMe'],
+    mutationFn: async (payload: any) => userApi.updateMe(payload),
+    onSuccess: (data) => {
+      refetchUserProfile();
+      refetch();
+    },
+  });
+
   const handleDeletePost = (postId: string) => {
     mutate(postId);
   };
@@ -52,7 +54,14 @@ export function MyProfilePage(props: MyProfilePageProps) {
     setEditProfileOpen(false);
   };
 
-  const handleEditProfileSubmit = (values: any) => {};
+  const handleEditProfileSubmit = (values: any, reset: Function) => {
+    updateMe(values, {
+      onSuccess: () => {
+        setEditProfileOpen(false);
+        reset();
+      },
+    });
+  };
 
   return (
     <>
@@ -61,12 +70,7 @@ export function MyProfilePage(props: MyProfilePageProps) {
 
         <div className="flex flex-nowrap px-9 flex-col xl:flex-row">
           <div className="w-full xl:max-w-[500px] mr-4 mt-4">
-            <UserInfo
-              bio={
-                'Nam quis nulla. Integer malesuada. In in enim a arcu imperdiet malesuada. Sed vel lectus. Donec odio urna tempus molestie, porttitor ut, iaculis quis, sem. Phasellus rhoncus. Aenean id metus id velit ullamcorper pulvinar. Vestibulum fermentum tortor id m'
-              }
-              userInfo={userInfo}
-            />
+            <UserInfo userInfo={useProfile?.data?.user} />
           </div>
           <div className="flex-1">
             <CreatePost className="m-0" refetch={refetch} />
@@ -84,12 +88,13 @@ export function MyProfilePage(props: MyProfilePageProps) {
         </div>
       </div>
 
-      <EditProfileDialog
-        isOpen={isEditProfileOpen}
-        userData={useProfile?.data?.user}
-        onClose={handleCloseEditProfile}
-        onSubmit={handleEditProfileSubmit}
-      />
+      {isEditProfileOpen && (
+        <EditProfileDialog
+          userData={useProfile?.data?.user}
+          onClose={handleCloseEditProfile}
+          onSubmit={handleEditProfileSubmit}
+        />
+      )}
     </>
   );
 }

@@ -1,27 +1,22 @@
-import * as React from 'react';
+import { UserData } from '@/models';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { BsHouseDoorFill } from 'react-icons/bs';
+import { BsHouseDoorFill, BsHeartFill } from 'react-icons/bs';
 import { MdLocationPin, MdWifi, MdWork } from 'react-icons/md';
 
-interface UserInfo {
-  work: string;
-  live: string;
-  from: string;
-  follow: string;
-}
-
 export interface UserInfoProps {
-  bio?: string;
-  userInfo?: UserInfo;
+  userInfo?: UserData;
 }
 
-export function UserInfo({ bio, userInfo }: UserInfoProps) {
+export function UserInfo({ userInfo }: UserInfoProps) {
   const { t } = useTranslation('profile');
+  const followerNumber = useMemo(() => Array.isArray(userInfo?.followers) && userInfo?.followers?.length, [userInfo]);
+
   return (
     <div className="rounded-lg bg-white p-4">
       <p className="m-0 text-xl font-semibold">{t('profileTitle')}</p>
       <div>
-        <p className="m-0 py-4 text-sm text-center border-b">{bio}</p>
+        <p className="m-0 py-4 text-sm text-center border-b">{userInfo?.bio}</p>
 
         {userInfo?.work && (
           <div className="flex justify-start items-center text-sm py-2">
@@ -31,11 +26,11 @@ export function UserInfo({ bio, userInfo }: UserInfoProps) {
           </div>
         )}
 
-        {userInfo?.live && (
+        {userInfo?.city && (
           <div className="flex justify-start items-center text-sm py-2">
             <BsHouseDoorFill className="text-xl text-gray-400" />
             <p className="ml-2">{t('profileLive')}</p>
-            <p className="ml-1 font-medium">{userInfo?.live}</p>
+            <p className="ml-1 font-medium">{userInfo?.city}</p>
           </div>
         )}
 
@@ -47,11 +42,18 @@ export function UserInfo({ bio, userInfo }: UserInfoProps) {
           </div>
         )}
 
-        {userInfo?.follow && (
+        {userInfo?.relationship && (
+          <div className="flex justify-start items-center text-sm py-2">
+            <BsHeartFill className="text-xl text-gray-400" />
+            <p className="ml-2 font-medium capitalize">{userInfo?.relationship}</p>
+          </div>
+        )}
+
+        {Boolean(followerNumber) && (
           <div className="flex justify-start items-center text-sm py-2">
             <MdWifi className="text-xl text-gray-400" />
             <p className="ml-2">{t('profileFollow')}</p>
-            <p className="ml-1 font-medium">{userInfo?.follow}</p>
+            <p className="ml-1 font-medium">{followerNumber}</p>
           </div>
         )}
 
