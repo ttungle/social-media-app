@@ -34,13 +34,15 @@ export const updateMe = catchAsync(async (req, res, next) => {
     'relationship'
   );
 
-  // Check and remove old files.
-  [`user-profilePicture-${req.user.id}`, `user-coverPicture-${req.user.id}`].forEach((file) => {
-    removeOldFiles('./public/image/users', file);
-  });
-
-  if (req.files.profilePicture) filteredBody.profilePicture = req.files.profilePicture?.[0]?.path.replace('public', '');
-  if (req.files.coverPicture) filteredBody.coverPicture = req.files.coverPicture?.[0]?.path.replace('public', '');
+  // Check and remove old files before upload.
+  if (req.files.profilePicture) {
+    removeOldFiles('./public/image/users', `user-profilePicture-${req.user.id}`);
+    filteredBody.profilePicture = req.files.profilePicture?.[0]?.path.replace('public', '');
+  }
+  if (req.files.coverPicture) {
+    removeOldFiles('./public/image/users', `user-coverPicture-${req.user.id}`);
+    filteredBody.coverPicture = req.files.coverPicture?.[0]?.path.replace('public', '');
+  }
 
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
@@ -94,15 +96,14 @@ export const updateUser = catchAsync(async (req, res, next) => {
     'relationship'
   );
 
-  if (req.params.id) {
-    // Check and remove old files.
-    [`user-profilePicture-${req.params.id}`, `user-coverPicture-${req.params.id}`].forEach((file) => {
-      removeOldFiles('./public/image/users', file);
-    });
+  if (req.params.id && req.files.profilePicture) {
+    removeOldFiles('./public/image/users', `user-profilePicture-${req.params.id}`);
+    filteredBody.profilePicture = req.files.profilePicture?.[0]?.path.replace('public', '');
   }
-
-  if (req.files.profilePicture) filteredBody.profilePicture = req.files.profilePicture?.[0]?.path.replace('public', '');
-  if (req.files.coverPicture) filteredBody.coverPicture = req.files.coverPicture?.[0]?.path.replace('public', '');
+  if (req.params.id && req.files.coverPicture) {
+    removeOldFiles('./public/image/users', `user-coverPicture-${req.params.id}`);
+    filteredBody.coverPicture = req.files.coverPicture?.[0]?.path.replace('public', '');
+  }
 
   const user = await User.findByIdAndUpdate(req.params.id, filteredBody, {
     new: true,

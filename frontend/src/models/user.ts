@@ -6,6 +6,11 @@ export interface UserData {
   coverPicture?: string;
   followers?: Array<any>;
   followings?: Array<any>;
+  bio?: string;
+  work?: string;
+  city?: string;
+  from?: string;
+  relationship: 'single' | 'in relationship' | 'married';
   status?: 'active' | 'inactive';
 }
 
