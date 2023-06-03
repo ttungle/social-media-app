@@ -16,7 +16,8 @@ export interface UserDocument extends Document {
   followings: any;
   role: 'admin' | 'user';
   active: boolean;
-  description: string;
+  bio: string;
+  work: string;
   city: string;
   from: string;
   relationship: 'single' | 'in relationship' | 'married';
@@ -86,7 +87,11 @@ const userSchema = new mongoose.Schema<UserDocument>(
       default: true,
       select: false,
     },
-    description: {
+    bio: {
+      type: String,
+      max: 128,
+    },
+    work: {
       type: String,
       max: 128,
     },

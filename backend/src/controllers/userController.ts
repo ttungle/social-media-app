@@ -1,7 +1,14 @@
-import { AppError } from './../utils/appError';
 import User from '../models/userModel';
-import { calculateMetaData, catchAsync, filterObject } from '../utils';
+import { calculateMetaData, catchAsync, filterObject, removeOldFiles } from '../utils';
 import APIFeatures from '../utils/apiFeatures';
+import { uploadInit } from './../middlewares/fileMiddleware';
+import { AppError } from './../utils/appError';
+
+const upload = uploadInit('./public/image/users', 'user', 'image');
+export const uploadUserPictures = upload.fields([
+  { name: 'profilePicture', maxCount: 1 },
+  { name: 'coverPicture', maxCount: 1 },
+]);
 
 export const getMe = catchAsync(async (req, res, next) => {
   req.params.id = req.user.id;
@@ -15,19 +22,25 @@ export const updateMe = catchAsync(async (req, res, next) => {
       new AppError('This route is not for update password. Please use the /updateMyPassword route instead.', 400)
     );
 
-  const filteredBody = filterObject(
+  const filteredBody: any = filterObject(
     req.body,
     'username',
     'profilePicture',
     'coverPicture',
-    'followers',
-    'followings',
-    'description',
+    'bio',
+    'work',
     'city',
     'from',
-    'relationship',
-    'active'
+    'relationship'
   );
+
+  // Check and remove old files.
+  [`user-profilePicture-${req.user.id}`, `user-coverPicture-${req.user.id}`].forEach((file) => {
+    removeOldFiles('./public/image/users', file);
+  });
+
+  if (req.files.profilePicture) filteredBody.profilePicture = req.files.profilePicture?.[0]?.path.replace('public', '');
+  if (req.files.coverPicture) filteredBody.coverPicture = req.files.coverPicture?.[0]?.path.replace('public', '');
 
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
@@ -69,7 +82,29 @@ export const getUser = catchAsync(async (req, res, next) => {
 });
 
 export const updateUser = catchAsync(async (req, res, next) => {
-  const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+  const filteredBody: any = filterObject(
+    req.body,
+    'username',
+    'profilePicture',
+    'coverPicture',
+    'bio',
+    'work',
+    'city',
+    'from',
+    'relationship'
+  );
+
+  if (req.params.id) {
+    // Check and remove old files.
+    [`user-profilePicture-${req.params.id}`, `user-coverPicture-${req.params.id}`].forEach((file) => {
+      removeOldFiles('./public/image/users', file);
+    });
+  }
+
+  if (req.files.profilePicture) filteredBody.profilePicture = req.files.profilePicture?.[0]?.path.replace('public', '');
+  if (req.files.coverPicture) filteredBody.coverPicture = req.files.coverPicture?.[0]?.path.replace('public', '');
+
+  const user = await User.findByIdAndUpdate(req.params.id, filteredBody, {
     new: true,
     runValidators: true,
   });
