@@ -28,5 +28,10 @@
         "dialogTitle": "Tạo bài viết",
         "placeholder": "Bạn đang nghĩ gì,",
         "addToPostDesc": "Thêm vào bài viết của bạn"
+    },
+    "menu": {
+        "profile": "Hồ sơ của bạn",
+        "setting": "Cài đặt",
+        "signOut": "Đắng xuất"
     }
 }
