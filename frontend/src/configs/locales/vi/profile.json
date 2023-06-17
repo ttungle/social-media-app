@@ -14,5 +14,12 @@
         "work": "Công việc",
         "currentCity": "Thành phố hiện tại",
         "homeTown": "Quê"
+    },
+    "stats": {
+        "title": "Thống Kê Các Bài Đăng",
+        "description": "Có cái nhìn sâu sắc về tất cả các số liệu trong phân tích của bạn",
+        "overview": "Tổng quan",
+        "postCount": "Số bài đăng",
+        "totalLikes": "Tổng lượt thích"
     }
 }

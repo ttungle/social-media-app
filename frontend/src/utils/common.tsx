@@ -17,7 +17,7 @@ export function formatStringWithMaxLength(content: string, maxLength: number) {
 export function formatDateString(
   dateString: string | undefined,
   options: Intl.DateTimeFormatOptions | 'hide-time' = timeOptions,
-  locale: Intl.LocalesArgument = 'en',
+  locale: Intl.LocalesArgument = 'en'
 ) {
   if (!dateString) return '';
 
@@ -40,3 +40,12 @@ export function filterObject(obj: any, ...allowFields: any[]) {
 
   return object;
 }
+
+export const convertMonth = (monthNumber: number | string, currentLanguage: string) => {
+  const date = new Date();
+  date.setMonth(Number(monthNumber) - 1);
+
+  return date.toLocaleString(currentLanguage === 'en' ? 'en-US' : 'vi-VN', {
+    month: 'long',
+  });
+};

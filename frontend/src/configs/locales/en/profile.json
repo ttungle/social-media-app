@@ -14,5 +14,12 @@
         "work": "Work",
         "currentCity": "Current town/city",
         "homeTown": "Home town"
+    },
+    "stats": {
+        "title": "Post Stats",
+        "description": "Have an in-depth look at all the metrics within your analytics",
+        "overview": "Overview",
+        "postCount": "Post Count",
+        "totalLikes": "Total Likes"
     }
 }

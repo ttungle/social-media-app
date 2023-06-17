@@ -13,7 +13,7 @@ export function UserInfo({ userInfo }: UserInfoProps) {
   const followerNumber = useMemo(() => Array.isArray(userInfo?.followers) && userInfo?.followers?.length, [userInfo]);
 
   return (
-    <div className="rounded-lg bg-white p-4">
+    <div className="rounded-lg bg-white p-4 shadow">
       <p className="m-0 text-xl font-semibold">{t('profileTitle')}</p>
       <div>
         <p className="m-0 py-4 text-sm text-center border-b">{userInfo?.bio}</p>

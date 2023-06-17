@@ -36,4 +36,9 @@ export const postApi = {
     const url = `/posts/${postId}/like`;
     return axiosClient.put(url);
   },
+
+  postStats(year: string | number) {
+    const url = `/posts/stats/${year}`;
+    return axiosClient.get(url);
+  },
 };
