@@ -22,7 +22,7 @@ export function ProfileAvatar(props: ProfileAvatarProps) {
   return (
     <>
       <div className={`${className} relative rounded-full`} onClick={handleClick}>
-        <div className="bg-white rounded-full p-1">
+        <div className="bg-white w-full h-full rounded-full p-1">
           <img
             src={getMediaUrl(src) ?? ''}
             alt={alt}

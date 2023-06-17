@@ -33,6 +33,7 @@ export function LoginPage(props: LoginPageProps) {
 
   const schema = yup.object({
     email: yup.string().email('Please enter your email.').required('Please enter your valid email.'),
+    password: yup.string().required('Please enter your password.'),
   });
 
   const form = useForm({
