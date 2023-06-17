@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { uploadInit } from '../middlewares/fileMiddleware';
 import Post from '../models/postModel';
 import { calculateMetaData, filterObject } from '../utils';
@@ -147,5 +148,37 @@ export const getUserTimeline = catchAsync(async (req, res, next) => {
     status: 'success',
     data: { posts },
     meta,
+  });
+});
+
+export const getPostStats = catchAsync(async (req, res, next) => {
+  const stats = await Post.aggregate([
+    {
+      $match: {
+        author: new mongoose.Types.ObjectId(`${req.user.id}`),
+        updatedAt: { $gte: new Date(req.params.year, 0, 1), $lte: new Date(req.params.year, 12, 32) },
+      },
+    },
+    {
+      $group: {
+        _id: { month: { $month: '$updatedAt' }, year: { $year: '$updatedAt' } },
+        postCount: { $sum: 1 },
+        totalLikes: { $sum: { $size: '$likes' } },
+        maxLikes: { $max: { $size: '$likes' } },
+        minLikes: { $min: { $size: '$likes' } },
+      },
+    },
+    {
+      $addFields: {
+        month: '$_id.month',
+        year: '$_id.year',
+      },
+    },
+    { $unset: ['_id'] },
+  ]);
+
+  res.status(200).json({
+    status: 'success',
+    data: { stats },
   });
 });
