@@ -56,6 +56,7 @@ export function Feed(props: FeedProps) {
   );
   const numberOfComments = useMemo(() => (Array.isArray(post.comments) ? post.comments.length : null), [post]);
   const numberOfShares = useMemo(() => (Array.isArray(post.shares) ? post.shares.length : null), [post]);
+  const isShowEditButton = useMemo(() => post?.author?._id === user?._id, [post]);
 
   const handleOpenMenuClick = () => {
     setOpenMenu(!openMenu);
@@ -111,9 +112,11 @@ export function Feed(props: FeedProps) {
           />
 
           <div ref={refElement}>
-            <IconButton onClick={handleOpenMenuClick} className="p-2.5 text-gray-900 rounded-full">
-              <BiDotsVerticalRounded className="text-lg" />
-            </IconButton>
+            {isShowEditButton && (
+              <IconButton onClick={handleOpenMenuClick} className="p-2.5 text-gray-900 rounded-full">
+                <BiDotsVerticalRounded className="text-lg" />
+              </IconButton>
+            )}
             {onDelete && (
               <IconButton onClick={handleDeleteClick} className="p-2.5 text-gray-900 rounded-full">
                 <GrClose className="text-lg" />

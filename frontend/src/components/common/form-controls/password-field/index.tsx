@@ -19,7 +19,9 @@ export function PasswordField(props: PasswordFieldProps) {
     <>
       <input
         type="password"
-        className={`p-3.5 w-full border rounded-lg outline-none ${className}`}
+        className={`p-3.5 w-full border rounded-lg outline-none ${className} ${
+          errors[name]?.message && 'border-rose-500'
+        }`}
         placeholder={placeholder}
         {...register(name)}
       />
