@@ -1,18 +1,20 @@
 import { postApi } from '@/api/post';
 import { userApi } from '@/api/user';
-import { Feed } from '@/components/common/feed';
 import { CoverImage } from '@/components/cover-image';
-import { CreatePost } from '@/components/create-post';
-import { UserInfo } from '@/components/user-info';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import clsx from 'clsx';
+import { useCallback, useState } from 'react';
 import { EditProfileDialog } from '../components/edit-profile-dialog';
+import { FriendContent } from '../components/friend-content';
+import { PostContent } from '../components/post-content';
+import { StatsContent } from '../components/stats-content';
 
 export interface MyProfilePageProps {}
 
 export function MyProfilePage(props: MyProfilePageProps) {
   const [reload, setReload] = useState(false);
   const [isEditProfileOpen, setEditProfileOpen] = useState(false);
+  const [openTab, setOpenTab] = useState(0);
 
   const { data: useProfile, refetch: refetchUserProfile } = useQuery({
     queryKey: ['getUserProfile'],
@@ -42,9 +44,9 @@ export function MyProfilePage(props: MyProfilePageProps) {
     },
   });
 
-  const handleDeletePost = (postId: string) => {
+  const handleDeletePost = useCallback((postId: string) => {
     mutate(postId);
-  };
+  }, []);
 
   const handleEditProfileClick = () => {
     setEditProfileOpen(!isEditProfileOpen);
@@ -54,38 +56,81 @@ export function MyProfilePage(props: MyProfilePageProps) {
     setEditProfileOpen(false);
   };
 
-  const handleEditProfileSubmit = (values: any, reset: Function) => {
+  const handleEditProfileSubmit = useCallback((values: any, reset: Function) => {
     updateMe(values, {
       onSuccess: () => {
         setEditProfileOpen(false);
         reset();
       },
     });
+  }, []);
+
+  const handleTabClick = (index: number) => {
+    setOpenTab(index);
   };
+
+  const TAB_MENUs = [
+    {
+      label: 'Posts',
+      isDefaultActive: true,
+      content: (
+        <PostContent
+          user={useProfile?.data?.user}
+          timelinePosts={myTimelinePosts}
+          refetch={refetch}
+          onDeletePost={handleDeletePost}
+        />
+      ),
+    },
+    {
+      label: 'Friends',
+      isDefaultActive: false,
+      content: <FriendContent />,
+    },
+    {
+      label: 'Stats',
+      isDefaultActive: false,
+      content: <StatsContent />,
+    },
+  ];
 
   return (
     <>
       <div className="container mx-auto max-w-screen-xl">
         <CoverImage userData={useProfile?.data?.user} isMyProfile={true} onEditClick={handleEditProfileClick} />
 
-        <div className="flex flex-nowrap px-9 flex-col xl:flex-row">
-          <div className="w-full xl:max-w-[500px] mr-4 mt-4">
-            <UserInfo userInfo={useProfile?.data?.user} />
-          </div>
-          <div className="flex-1">
-            <CreatePost className="m-0" refetch={refetch} />
-            {myTimelinePosts?.data?.posts.map((post, index) => (
-              <Feed
-                key={post._id}
-                {...post}
-                post={post}
-                onDelete={handleDeletePost}
-                className="m-0 px-0 w-full"
-                refetchFn={() => setReload(!reload)}
-              />
+        <div className="bg-white h-12 w-full shadow-sm rounded-sm">
+          <ul className={clsx('w-1/3 h-full flex list-none flex-wrap')}>
+            {TAB_MENUs.map((item, index) => (
+              <li
+                key={index}
+                className={clsx('flex items-center px-4 text-center border-b-2', {
+                  'border-primary': openTab === index,
+                  'border-transparent': openTab !== index,
+                })}
+                onClick={() => handleTabClick(index)}
+              >
+                <a
+                  className={clsx(
+                    'mb-0 flex w-full cursor-pointer items-center justify-center rounded-lg border-0 bg-inherit px-0 py-1 transition-all ease-in-out',
+                    { 'text-primary': openTab === index, 'text-slate-800': openTab !== index }
+                  )}
+                >
+                  <span className="ml-1 text-sm font-medium">{item?.label}</span>
+                </a>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
+
+        {TAB_MENUs.map((item, index) => (
+          <div
+            key={index}
+            className={clsx({ 'block opacity-100': openTab === index, 'hidden opacity-0': openTab !== index })}
+          >
+            {item.content}
+          </div>
+        ))}
       </div>
 
       {isEditProfileOpen && (

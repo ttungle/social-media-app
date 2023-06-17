@@ -175,6 +175,7 @@ export const getPostStats = catchAsync(async (req, res, next) => {
       },
     },
     { $unset: ['_id'] },
+    { $sort: { month: 1 } },
   ]);
 
   res.status(200).json({

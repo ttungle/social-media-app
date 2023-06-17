@@ -51,7 +51,7 @@ export function CoverImage(props: CoverImageProps) {
 
     if (isFollowing && userData?._id) unFollowUser(userData?._id);
   };
-  
+
   const handleEditClick = () => {
     if (!onEditClick) return;
     onEditClick();
@@ -69,10 +69,7 @@ export function CoverImage(props: CoverImageProps) {
 
         <div className="flex justify-between items-end absolute left-0 -bottom-32 right-0 z-10 px-9">
           <div className="flex justify-center items-center">
-            <ProfileAvatar
-              src={getMediaUrl(userData?.profilePicture) ?? ''}
-              className="w-40 h-40"
-            />
+            <ProfileAvatar src={getMediaUrl(userData?.profilePicture) ?? ''} className="w-40 h-40" />
             <span className="text-3xl font-semibold text-gray-800 ml-4">{userData?.username}</span>
           </div>
 
@@ -85,7 +82,9 @@ export function CoverImage(props: CoverImageProps) {
 
               <ContainedButton className="bg-gray-300 ml-2">
                 <HiPencil className="text-lg" />
-                <span onClick={handleEditClick} className="font-medium text-sm ml-1 text-gray-800">Edit profile</span>
+                <span onClick={handleEditClick} className="font-medium text-sm ml-1 text-gray-800">
+                  Edit profile
+                </span>
               </ContainedButton>
             </div>
           )}
@@ -113,7 +112,6 @@ export function CoverImage(props: CoverImageProps) {
       </div>
       <div className="bg-white h-36 w-full"></div>
       <div className="border-t border-gray-300"></div>
-      <div className="bg-white h-12 w-full rounded-b-lg shadow"></div>
     </div>
   );
 }
