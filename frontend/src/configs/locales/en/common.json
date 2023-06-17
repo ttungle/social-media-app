@@ -28,5 +28,10 @@
         "dialogTitle": "Create post",
         "placeholder": "What in your mind,",
         "addToPostDesc": "Add to your post"
+    },
+    "menu": {
+        "profile": "Your profile",
+        "setting": "Settings",
+        "signOut": "Sign out"
     }
 }

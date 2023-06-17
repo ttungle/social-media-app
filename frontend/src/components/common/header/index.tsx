@@ -7,6 +7,7 @@ import { SelectItemData, SelectionField } from '../form-controls/selection-field
 import { BASE_ROUTEs } from '@/constants/base-routes';
 import { useAuthContext } from '@/context';
 import { useNavigate } from 'react-router-dom';
+import { getMediaUrl } from '@/utils';
 
 const localData = [
   { label: 'English', value: 'en' },
@@ -14,10 +15,10 @@ const localData = [
 ];
 
 export function Header() {
-  const { i18n } = useTranslation('home');
+  const { t, i18n } = useTranslation('home');
   const [openMenu, setOpenMenu] = useState(false);
   const refMenu = useRef<any>(null);
-  const { logout } = useAuthContext();
+  const { user, logout } = useAuthContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -73,11 +74,7 @@ export function Header() {
               <div className="relative ml-3">
                 <div>
                   <button className="flex rounded-full bg-slate-200 text-sm" onClick={handleAvatarClick}>
-                    <img
-                      className="h-10 w-10 rounded-full"
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                      alt=""
-                    />
+                    <img className="h-10 w-10 rounded-full" src={getMediaUrl(user?.profilePicture) ?? ''} alt="" />
                   </button>
                 </div>
                 {openMenu && (
@@ -86,19 +83,19 @@ export function Header() {
                       ref={refMenu}
                       className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                     >
-                      <div>
+                      <div className="hover:bg-gray-100">
                         <a href="#" className={'block px-4 py-2 text-sm text-gray-700'}>
-                          Your Profile
+                          {t('common:menu.profile')}
                         </a>
                       </div>
-                      <div>
+                      <div className="hover:bg-gray-100">
                         <a href="#" className="block px-4 py-2 text-sm text-gray-700">
-                          Settings
+                          {t('common:menu.setting')}
                         </a>
                       </div>
-                      <div onClick={handleLogoutClick}>
+                      <div className="hover:bg-gray-100" onClick={handleLogoutClick}>
                         <a href="#" className="block px-4 py-2 text-sm text-gray-700">
-                          Sign out
+                          {t('common:menu.signOut')}
                         </a>
                       </div>
                     </div>
