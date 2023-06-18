@@ -1,9 +1,14 @@
 import { TimelinePostResultData } from '@/models';
 import axiosClient from './axios';
 
+interface PageParams {
+  page: string | number;
+  pageSize: string | number;
+}
+
 export const postApi = {
-  getTimelinePost(): Promise<TimelinePostResultData> {
-    const url = '/posts/timeline';
+  getTimelinePost({ page = 1, pageSize = 25 }: PageParams): Promise<TimelinePostResultData> {
+    const url = `/posts/timeline?page=${page}&pageSize=${pageSize}`;
     return axiosClient.get(url);
   },
 

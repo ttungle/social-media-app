@@ -4,7 +4,7 @@ import { useAuthContext } from '@/context';
 import { PostData } from '@/models';
 import { useMutation } from '@tanstack/react-query';
 import clsx from 'clsx';
-import { useMemo, useRef, useState } from 'react';
+import { forwardRef, useMemo, useRef, useState } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
@@ -24,7 +24,7 @@ export interface FeedProps {
   refetchFn?: () => void;
 }
 
-export function Feed(props: FeedProps) {
+export const Feed = forwardRef((props: FeedProps, ref: any) => {
   const { post, className, onDelete, refetchFn } = props;
   const { t } = useTranslation();
   const { user } = useAuthContext();
@@ -102,7 +102,7 @@ export function Feed(props: FeedProps) {
 
   return (
     <>
-      <div className={`max-w-2xl mx-auto mt-4 rounded-lg bg-white shadow ${className}`}>
+      <div ref={ref} className={`max-w-2xl mx-auto mt-4 rounded-lg bg-white shadow ${className}`}>
         <div className="flex items-center justify-between px-4 pt-3">
           <AvatarWithText
             src={post?.author?.profilePicture ?? ''}
@@ -208,4 +208,4 @@ export function Feed(props: FeedProps) {
       )}
     </>
   );
-}
+});

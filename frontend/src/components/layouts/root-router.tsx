@@ -10,6 +10,7 @@ import FriendPage from '@/features/friend';
 export const rootRouter = createBrowserRouter([
   {
     path: BASE_ROUTEs.home,
+    errorElement: <div>Something went wrong</div>,
     element: (
       <MainLayout>
         <HomePage />
