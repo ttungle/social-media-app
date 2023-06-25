@@ -1,5 +1,6 @@
 import { TimelinePostResultData } from '@/models';
 import axiosClient from './axios';
+import qs from 'qs';
 
 interface PageParams {
   page: string | number;
@@ -7,18 +8,36 @@ interface PageParams {
 }
 
 export const postApi = {
-  getTimelinePost({ page = 1, pageSize = 25 }: PageParams): Promise<TimelinePostResultData> {
-    const url = `/posts/timeline?page=${page}&pageSize=${pageSize}`;
+  getTimelinePost(queryParams: PageParams): Promise<TimelinePostResultData> {
+    const { page = 1, pageSize = 25 } = queryParams;
+    const query = qs.stringify({
+      page,
+      pageSize,
+    });
+
+    const url = `/posts/timeline?${query}`;
     return axiosClient.get(url);
   },
 
-  getMyTimeLine(): Promise<TimelinePostResultData> {
-    const url = '/posts/myTimeline';
+  getMyTimeLine(queryParams: PageParams): Promise<TimelinePostResultData> {
+    const { page = 1, pageSize = 25 } = queryParams;
+    const query = qs.stringify({
+      page,
+      pageSize,
+    });
+
+    const url = `/posts/myTimeline?${query}`;
     return axiosClient.get(url);
   },
 
-  getUserTimeline(userId: string): Promise<TimelinePostResultData> {
-    const url = `/posts/${userId}/timeline`;
+  getUserTimeline(userId: string, queryParams: PageParams): Promise<TimelinePostResultData> {
+    const { page = 1, pageSize = 25 } = queryParams;
+    const query = qs.stringify({
+      page,
+      pageSize,
+    });
+
+    const url = `/posts/${userId}/timeline?${query}`;
     return axiosClient.get(url);
   },
 
