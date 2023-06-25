@@ -226,7 +226,7 @@ export const getUsersWithin = catchAsync(async (req, res, next) => {
 
   const radius = unit === 'mi' ? distance / 3963.2 : distance / 6378.1;
 
-  const users = await User.find({ location: { $geoWithin: { $centerSphere: [[lat, lng], radius] } } });
+  const users = await User.find({ location: { $geoWithin: { $centerSphere: [[lng, lat], radius] } } });
 
   res.status(200).json({
     status: 'success',

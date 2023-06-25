@@ -15,6 +15,11 @@
         "currentCity": "Thành phố hiện tại",
         "homeTown": "Quê"
     },
+    "friends": {
+        "title": "Tìm Bạn Quanh Đây",
+        "description": "Tìm bạn bè quanh đây từ vị trí hiện tại của bạn",
+        "noFriendFoundMsg": "Không có người nào quanh đây"
+    },
     "stats": {
         "title": "Thống Kê Các Bài Đăng",
         "description": "Có cái nhìn sâu sắc về tất cả các số liệu trong phân tích của bạn",

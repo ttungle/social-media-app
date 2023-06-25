@@ -15,6 +15,11 @@
         "currentCity": "Current town/city",
         "homeTown": "Home town"
     },
+    "friends": {
+        "title": "Find Friends Within Distance",
+        "description": "Find friends within distance from your current location",
+        "noFriendFoundMsg": "There are no users within this given distance"
+    },
     "stats": {
         "title": "Post Stats",
         "description": "Have an in-depth look at all the metrics within your analytics",
