@@ -31,7 +31,8 @@ export const updateMe = catchAsync(async (req, res, next) => {
     'work',
     'city',
     'from',
-    'relationship'
+    'relationship',
+    'location'
   );
 
   // Check and remove old files before upload.
@@ -93,7 +94,8 @@ export const updateUser = catchAsync(async (req, res, next) => {
     'work',
     'city',
     'from',
-    'relationship'
+    'relationship',
+    'location'
   );
 
   if (req.params.id && req.files.profilePicture) {
@@ -213,5 +215,24 @@ export const getSuggestionFriends = catchAsync(async (req, res, next) => {
       users: userDoc,
     },
     meta,
+  });
+});
+
+export const getUsersWithin = catchAsync(async (req, res, next) => {
+  const { distance, latlng, unit } = req.params;
+  const [lat, lng] = latlng.split(',');
+
+  if (!lat || !lng) return next(new AppError('Please provide latitude and longitude in the format lat,lng.', 400));
+
+  const radius = unit === 'mi' ? distance / 3963.2 : distance / 6378.1;
+
+  const users = await User.find({ location: { $geoWithin: { $centerSphere: [[lat, lng], radius] } } });
+
+  res.status(200).json({
+    status: 'success',
+    results: users.length,
+    data: {
+      data: users,
+    },
   });
 });
