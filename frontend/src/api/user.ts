@@ -1,3 +1,4 @@
+import { getUsersWithin } from './../../../backend/src/controllers/userController';
 import { FriendProfileResultData, UserFriendListResultData } from '@/models';
 import qs from 'query-string';
 import axiosClient from './axios';
@@ -40,6 +41,13 @@ export const userApi = {
     });
 
     const url = `/users/friends?${queryString}`;
+    return axiosClient.get(url);
+  },
+
+  getUsersWithin(params: any) {
+    const { distance, latlng, unit = 'km' } = params;
+    const url = `/users/users-within/${distance}/center/${latlng}/unit/${unit}`;
+
     return axiosClient.get(url);
   },
 };

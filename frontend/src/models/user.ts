@@ -1,3 +1,10 @@
+interface LocationData {
+  type: string;
+  coordinates: number[];
+  address?: string;
+  description?: string;
+}
+
 export interface UserData {
   _id: string;
   email: string;
@@ -10,6 +17,7 @@ export interface UserData {
   work?: string;
   city?: string;
   from?: string;
+  location?: LocationData;
   relationship: 'single' | 'in relationship' | 'married';
   status?: 'active' | 'inactive';
 }
