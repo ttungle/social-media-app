@@ -1,6 +1,7 @@
 import { postApi } from '@/api/post';
 import { userApi } from '@/api/user';
 import { CoverImage } from '@/components/cover-image';
+import { useInfinityScroll } from '@/hooks/use-infinity-scroll';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { useCallback, useState } from 'react';
@@ -8,6 +9,7 @@ import { EditProfileDialog } from '../components/edit-profile-dialog';
 import { FriendContent } from '../components/friend-content';
 import { PostContent } from '../components/post-content';
 import { StatsContent } from '../components/stats-content';
+import { PAGE_LIMIT } from '@/constants/common';
 
 export interface MyProfilePageProps {}
 
@@ -15,16 +17,16 @@ export function MyProfilePage(props: MyProfilePageProps) {
   const [reload, setReload] = useState(false);
   const [isEditProfileOpen, setEditProfileOpen] = useState(false);
   const [openTab, setOpenTab] = useState(0);
+  const { lastPost, infiniteQuery } = useInfinityScroll({
+    queryKey: ['getMyPosts'],
+    queryFn: async ({ pageParam = 1 }) => await postApi.getMyTimeLine({ page: pageParam, pageSize: PAGE_LIMIT }),
+  });
+
+  const { data: postList, isFetchingNextPage, hasNextPage, isLoading, refetch } = infiniteQuery;
 
   const { data: useProfile, refetch: refetchUserProfile } = useQuery({
     queryKey: ['getUserProfile'],
     queryFn: async () => await userApi.getMe(),
-  });
-
-  const { data: myTimelinePosts, refetch } = useQuery({
-    queryKey: ['getMyPosts', reload],
-    queryFn: async () => await postApi.getMyTimeLine(),
-    cacheTime: 0,
   });
 
   const { mutate } = useMutation({
@@ -75,8 +77,10 @@ export function MyProfilePage(props: MyProfilePageProps) {
       isDefaultActive: true,
       content: (
         <PostContent
+          ref={lastPost}
           user={useProfile?.data?.user}
-          timelinePosts={myTimelinePosts}
+          timelinePosts={postList}
+          isLoading={(isFetchingNextPage && hasNextPage) || isLoading}
           refetch={refetch}
           onDeletePost={handleDeletePost}
         />
