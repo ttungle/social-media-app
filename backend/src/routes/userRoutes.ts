@@ -12,6 +12,7 @@ import {
   updateMe,
   updateUser,
   uploadUserPictures,
+  getUsersWithin,
 } from '../controllers/userController';
 import { restrictTo } from '../middlewares/authMiddleware';
 
@@ -25,6 +26,7 @@ router.put('/:id/follow', followUser);
 router.put('/:id/unfollow', unFollowUser);
 router.get('/friends', getSuggestionFriends);
 router.get('/friends/:userId', getFriendList);
+router.get('/users-within/:distance/center/:latlng/unit/:unit', getUsersWithin);
 
 router.use(restrictTo('admin'));
 router.route('/:id').get(getUser).patch(uploadUserPictures, updateUser).delete(deleteUser);

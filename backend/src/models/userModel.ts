@@ -1,6 +1,13 @@
 import mongoose, { Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 
+interface LocationData {
+  type: string;
+  coordinates: number[];
+  address?: string;
+  description?: string;
+}
+
 export interface UserDocument extends Document {
   username: string;
   email: string;
@@ -20,6 +27,7 @@ export interface UserDocument extends Document {
   work: string;
   city: string;
   from: string;
+  location: LocationData;
   relationship: 'single' | 'in relationship' | 'married';
   checkPassword: (inputPassword: string, encryptedPassword: string) => boolean;
   passwordChangeAfter: (jwtCreatedAt: Date) => boolean;
@@ -103,6 +111,18 @@ const userSchema = new mongoose.Schema<UserDocument>(
       type: String,
       max: 64,
     },
+    location: {
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point'],
+      },
+      coordinates: {
+        type: [Number],
+      },
+      address: String,
+      description: String,
+    },
     relationship: {
       type: String,
       enum: ['single', 'in relationship', 'married'],
@@ -110,6 +130,8 @@ const userSchema = new mongoose.Schema<UserDocument>(
   },
   { timestamps: true }
 );
+
+userSchema.index({ location: '2dsphere' });
 
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) next();
